@@ -1,0 +1,128 @@
+﻿1. Kerols
+* Scenarios :
+1. Jack is preparing for an upcoming test so he logs into the AI study assistant and inputs his study preferences such as practice problems. The AI then asks for his available study hours. Based on Jack’s inputs, the AI study assistant generates a structured study schedule that includes his best learning techniques. Jack follows the plan and notices his improvement.
+2. Bob usually gets distracted while studying. The AI study assistant provided him with focus techniques to help him focus for a certain amount of time and take small breaks in between. Bob follow this method and finished his study session with minimal distractions
+3. Jill used the AI study assistant to generate a practice test/study guide for her upcoming exam. The study assistant analyzed all of Jill’s answers to find her weak points and adjust her study plan accordingly. Over time, Jill’s understanding of the topics progresses and she scores higher on each exam.
+4. Ronald has a busy weekend ahead of him with his friends. He also has many deadlines coming up the same weekend and does not know how to finish everything in time so that he can have fun with his friends. He inputs all his assignments and deadlines into his AI study assistant and generates a well balanced schedule so that he can finish all his work before the deadlines and also enjoy his weekend.
+* User stories:
+1. As a computer science student I have a hard time with retaining all information. I want the AI study assistant to come up with the best study techniques for me to help retain all of the information better.
+2. When taking an online course, distractions are everywhere. Whether I am in my room or on campus, something else is always catching my attention. I want the AI study assistant to help me come up with a focus technique to minimize distractions so that I can focus in my online course.
+3. As a graduate student I don’t have much time to study for every single thing. I want to use the AI study assistant to help me identify my weak points so I can be as efficient as possible with my limited study time.
+4. As a medical student my days are packed. I can barely find time to relax. I want to use an AI study assistant to help me come up with a nice balanced schedule between work, school, and life so that I am not burned out every week.
+* Feature:
+1. Built in timer
+2. Survey/questionnaire for users to enter some behavioral characteristics and best learning techniques. 
+3. Lockdown the browser to avoid distractions and simulate a test environment
+4. Can generate flashcards to easily study important definitions.
+
+
+2. Alphin
+* Scenarios & User Story:
+1. User Story: 
+* As a graduate student overwhelmed by information, I want an AI study assistant to create a personalized and dynamic study plan, so that I can efficiently retain information and improve my academic performance.
+Scenario:
+* Kevin, a computer science master's student, has difficulty managing complex study materials. The AI study assistant prompts him to enter his exam dates, learning style, and weaknesses. Based on this, it creates an adaptive study plan that includes concept mapping and problem-solving activities. As a result, Kevin's retention has improved, and he feels less stressed during exam preparation.
+
+
+
+
+2. User Story:
+* As a college student who procrastinates, I want the AI study assistant to provide smart reminders and structured task breakdowns so that I stay motivated and avoid last-minute cramming.
+Scenario:
+* Emma, a biology student, frequently leaves studying to the last minute. The AI assistant examines her habits and detects inactivity during her study sessions. It provides gentle nudges and suggests quick revision tasks to re-engage her. Emma gradually improves her study habits and feels better prepared for exams.
+
+
+3. User Story: 
+* As a student balancing work, academics, and personal life, I want an AI assistant to prioritize tasks and suggest study strategies based on available time, so that I can optimize my schedule without feeling overwhelmed.
+                        Scenario:
+* David, a sophomore majoring in computer science, works part-time and is working on a data science project in addition to his classes. He struggles to make effective study time allocations. The AI study assistant syncs with his calendar, detecting open time slots and recommending study sessions accordingly. As a result, David maximizes productivity while maintaining his personal commitments.
+
+
+
+
+4. User Story:
+* As a student struggling with anxiety and focus issues, I want the AI study assistant to provide stress-reducing techniques and adaptive study recommendations so that I can stay productive without feeling overwhelmed.
+                        Scenario:
+* Tom, a first-generation college student, frequently experiences anxiety about his coursework and deadlines. The AI assistant identifies stress-induced procrastination patterns and recommends focus techniques like Pomodoro study sessions and guided relaxation breaks. He gradually gains confidence in managing his coursework while adhering to a healthier study schedule.
+* Features:
+1. Study Planner – The AI assistant creates a personalized and dynamic study schedule based on the user’s exam dates, learning style, and weak areas.
+2. Smart Reminders – The assistant detects inactivity and procrastination patterns, and breaks down study tasks into manageable chunks.
+3. Time Management– The AI syncs with the user’s calendar, prioritizing study sessions based on workload, and deadlines.
+4. Well-being Support – The assistant provides stress-reducing techniques like guided relaxation and adaptive study strategies.
+
+
+
+
+3. Rafan
+* Scenarios :
+1. As a graduate student, balancing coursework, research, and personal commitments is a difficult task for me. I want a study assistant that helps me optimize my study schedule, so I can retain information effectively and reduce stress for all of my classes.
+2. As a college sophomore who struggles with procrastination, I want a study tool that keeps me accountable for my educational goals  and makes studying more engaging. I can not afford to veer off  track and I want to reduce last-minute studying-cram sessions.
+3. As a student with ADHD, I want a study assistant that breaks down topics into manageable chunks and helps me stay focused without feeling overwhelmed.
+4. As a Law student preparing for the LSAT, I want an AI assistant that personalizes my revision schedule and provides targeted practice, so I can maximize efficiency and feel confident on test day.
+* User stories:
+1. Kevin is a master's student in data science who spends long hours juggling research, coursework, and a part-time teaching assistant job. He often feels overwhelmed by the vast amount of material he needs to learn and struggles to retain key concepts. Kevin hopes to find an AI study assistant that helps him organize his study schedule efficiently while reducing stress.
+2. Emma is a sophomore biology major who aspires to go to medical school but struggles with procrastination and last-minute cramming. She often gets distracted by social media and has trouble sticking to a study plan. She needs an AI-powered tool that keeps her accountable and helps her develop better study habits.
+3. Alex is a junior majoring in computer science who has ADHD and finds it difficult to focus for long periods. Traditional study methods don’t work well for him, and he often feels frustrated when studying complex programming concepts. He is looking for a study assistant that breaks down topics into smaller sections and adapts to his learning style.
+4. Sophia is a dedicated Law student who is preparing for the LSAT while balancing work and an intern at a law firm. She thrives on structured schedules but often feels anxious about whether she is studying the right material. She needs an AI-powered study tool that identifies her weak points, provides practice tests, and keeps her on track for her goal.
+* Feature list:
+1. AI-Powered Personalized Study Plans – Generates study schedules based on workload, due dates, and preferred learning style.
+2. Adaptive Focus Timer – Uses Pomodoro-style timers with AI-adjusted session lengths to match attention spans.
+3. Distraction-Free Mode – Provides a clean, focused UI with minimized notifications.
+4. AI-Powered Weakness Identification – Highlights weak subjects and recommends targeted review strategies.
+4. Viswanth
+* Scenarios :
+1. Jake sits at his desk with his laptop open, intending to study for his biology exam. However, he keeps checking his phone and watching TikTok. Every time he tries to start, he tells himself that he will start in five minutes, which eventually turns into an hour of wasted time.
+
+
+2. Tom is preparing for his business midterm. He has multiple textbooks, class notes, and online articles open, but everything feels stressful. He doesn’t know what’s important to study. He tries to summarize but ends up copying paragraphs, and is feeling stuck.
+3. John is preparing for an upcoming stat test, be he only reads his notes repeatedly without actively engaging with the material. When he tries to solve practice problems, he gets stuck and frustrated. He feels like he studies for hours but when tested, he doesn’t remember the key concepts.
+4. Alex has been studying for weeks for his cybersecurity certification exam, but every time he takes a practice test, he freezes up. His mind goes blank, and he starts doubting everything he knows. Even though he understands the material when reviewing, the pressure of the test makes him second-guess himself, leading to a poor performance despite his hard work.
+* User stories:
+1. As a student who struggles with procrastination, I want to minimize distractions and stay focused while studying so that I can effectively prepare for my biology exam without wasting time on social media.
+2. As a business student I am overwhelmed by study materials, I want to identify the most important concepts to focus on so that I can study efficiently and feel confident for my midterm.
+3. As a student taking stat who struggles with passive studying, I want to engage with the material through active learning strategies so that I can retain key concepts and solve practice problems with confidence.
+4. As a cybersecurity student dealing with test anxiety, I want to build confidence through practice tests and stress management techniques.
+* Feature list:
+1. Progress trackers that track the time spent while also tracking the time wasted. Also, a feature like a lockdown browser is used for exams, where it will lock out social media apps.
+2. Collaborative study groups allow students to share summaries discuss topics and connect with other students taking the same exams or similar classes.
+3. Active Learning exercises provide problem-solving tasks and adjust difficulty based on performance. Also, a study habit tracker monitors study techniques to encourage effective learning.
+4. Timed practice exams, which simulate real test conditions to reduce anxiety. Also add some stress relief tools, like providing breathing exercises and relaxation techniques.
+
+
+5. Elidad
+* Scenarios :
+1. Lionel gets demotivated when he doesn’t see progress. The AI provides visual progress charts, celebrates small wins, and sets achievable milestones to keep him engaged.
+
+
+2.Robben  is always second-guessing his study methods. He never knows if he’s using the right approach, which makes him anxious and frustrated, unsure if he’s wasting time or getting closer to his goal. The app offers personalized advice based on his learning style, so he doesn’t feel like he’s blindly studying. It gives him confidence that the approach is right for him.
+3. Lukas feels like he’s constantly multitasking between studying and social media. Every time he tries to focus, his phone distracts him, and he feels frustrated with himself for not having better self discipline. The app recognizes when he’s distracted and gently prompts him to refocus, offering techniques to resist the pull of digital distractions..
+4. Anthony is an introvert that feels like he’s failing because he’s not studying in a “traditional” way. He’s always tried studying in groups or using social methods, but it’s not working for him. The app recognizes that he learns better in solitude and suggests methods like journaling or quiet reflection, giving him the freedom to study in a way that suits his needs without feeling judged.
+* User stories:
+1.As a student using the app,I want the app to show me my progress with visual charts, celebrate small wins along the way, and set achievable milestones, so that I can stay motivated and keep going, even when it feels like I'm not making enough progress.
+2. As a student who constantly doubts if I’m studying the right way,
+I want the app to offer me personalized study strategies based on how I learn best, so that I can stop feeling uncertain and trust that I’m on the right path
+3.As a student who struggles with staying focused because of social media distractions, I want the app to gently remind me to refocus when I get distracted and offer techniques to resist the urge to check my phone, so that I can regain control of my focus and make the most out of my study time.
+4.As a student who feels like I’m failing because I don’t study the same way as others,
+I want the app to suggest solitary study methods that align with my preferences,
+so that I can study effectively without feeling pressured to follow conventional approaches.
+* Feature list:
+1.the website will have a Distraction Blocker,When activated, the website temporarily blocks distracting websites, allowing students like Lukas to fully concentrate on their study material without interruptions.
+2.The website will have a popup survey that students can select how they are feeling, Based on this information, the website will recommend adjustments to help improve focus and performance
+3.a feature that keeps track of study sessions, including time spent, subjects studied, and any goals achieved during the session.
+4. A feature for students to leave reviews on things they like and dislike about the website
+
+
+
+
+AS A GROUP
+10 Best Features:
+1. Built in timer
+2. Survey/questionnaire for users to enter some behavioral characteristics and best learning techniques. 
+3. Can generate flashcards to easily study important definitions.
+4. Distraction-Free Mode – Provides a clean, focused UI with minimized notifications.
+5. The website will have a popup survey that students can select how they are feeling, Based on this information, the website will recommend adjustments to help improve focus and performance
+6. Timed practice exams, which simulate real test conditions to reduce anxiety. Also add some stress relief tools, like providing breathing exercises and relaxation techniques.
+7. Collaborative study groups allow students to share summaries, discuss topics and connect with other students taking the same exams or similar classes.
+8. a feature that keeps track of study sessions, including time spent, subjects studied, and any goals achieved during the session.
+9. Well-being Support – The assistant provides stress-reducing techniques like guided relaxation and adaptive study strategies.
+10. Reviews so students can share their opinion on the product
