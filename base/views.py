@@ -23,3 +23,9 @@ def about_view(request):
     Render the about page
     """
     return render(request, 'base/about.html')
+
+def timer_page(request):
+    """
+    Render the timer page with toggle functionality
+    """
+    return render(request, 'base/timer.html')
