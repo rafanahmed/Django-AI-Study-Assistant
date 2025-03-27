@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Flashcard Decks</h1>
+    
+    <div class="text-end mb-3">
+        <a href="{% url 'create_deck' %}" class="btn btn-primary">
+            Create New Deck
+        </a>
+    </div>
+
+    <div class="row">
+        {% for deck in decks %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ deck.name }}</h5>
+                    <p class="card-text">{{ deck.description|truncatewords:10 }}</p>
+                    <a href="{% url 'deck_detail' deck.pk %}" class="btn btn-outline-primary">
+                        View Deck
+                    </a>
+                </div>
+                <div class="card-footer text-muted">
+                    Created: {{ deck.created_at|date:"M d, Y" }}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                No flashcard decks created yet. 
+                <a href="{% url 'create_deck' %}" class="alert-link">Create your first deck!</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">{{ deck.name }}</h1>
+    <p class="text-center text-muted">{{ deck.description }}</p>
+    
+    <!-- Add the study button -->
+    <div class="text-center mb-4">
+        <a href="{% url 'study_flashcards' deck.id %}" class="btn btn-info">Study Flashcards</a>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Flashcards</h2>
+            {% for card in cards %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Question</h5>
+                    <p>{{ card.question }}</p>
+                    <hr>
+                    <h5 class="card-title">Answer</h5>
+                    <p>{{ card.answer }}</p>
+                    {% if card.tags %}
+                    <div class="mt-2">
+                        <span class="badge bg-secondary">{{ card.tags }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-info">
+                No flashcards in this deck yet.
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    Add New Flashcard
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="{{ form.question.id_for_label }}" class="form-label">Question</label>
+                            {{ form.question }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.answer.id_for_label }}" class="form-label">Answer</label>
+                            {{ form.answer }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.tags.id_for_label }}" class="form-label">Tags (Optional)</label>
+                            {{ form.tags }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Flashcard</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Study Flashcards: {{ deck.name }}</h1>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" id="flashcard">
+                        <span id="flashcard-question">{{ current_card.question }}</span>
+                        <span id="flashcard-answer" style="display:none">{{ current_card.answer }}</span>
+                    </h5>
+                    <button class="btn btn-secondary" id="flip-button" onclick="flipCard()">Flip Card</button>
+                    <div class="mt-4">
+                        <a href="{% url 'study_flashcards' deck.id %}?card={{ next_card_index }}" class="btn btn-primary">
+                            Next Flashcard
+                        </a>
+                    </div>
+                    <p class="mt-2">
+                        Card {{ current_card_index_plus_one }} of {{ total_cards }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Function to flip the flashcard
+    function flipCard() {
+        var question = document.getElementById('flashcard-question');
+        var answer = document.getElementById('flashcard-answer');
+        
+        if (question.style.display === 'none') {
+            question.style.display = 'block';
+            answer.style.display = 'none';
+        } else {
+            question.style.display = 'none';
+            answer.style.display = 'block';
+        }
+    }
+</script>
+
+{% endblock %}
