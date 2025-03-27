@@ -100,3 +100,10 @@ def study_flashcards_view(request, deck_id):
         'current_card_index_plus_one': current_card_index_plus_one,
         'total_cards': len(cards),
     })
+
+
+def timer_page(request):
+    """
+    Render the timer page with toggle functionality
+    """
+    return render(request, 'base/timer.html')
