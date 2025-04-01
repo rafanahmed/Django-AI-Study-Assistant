@@ -12,4 +12,5 @@ urlpatterns = [
     path('deck/<int:deck_id>/study/', views.study_flashcards_view, name='study_flashcards'),
     
     path('timer/', views.timer_page, name='timer'),
+    path('reviews/', views.review_page, name='review_page'),
 ]

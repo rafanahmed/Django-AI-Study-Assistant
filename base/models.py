@@ -19,3 +19,10 @@ class Flashcard(models.Model):
     deck = models.ForeignKey(FlashcardDeck, on_delete=models.CASCADE, related_name='flashcards')
     created_at = models.DateTimeField(auto_now_add=True)
     tags = models.CharField(max_length=255, blank=True, null=True)  # Example field for tags
+
+class Review(models.Model):
+    text = models.TextField()
+    stars = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+

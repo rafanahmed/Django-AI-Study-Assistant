@@ -1,5 +1,5 @@
 from django import forms
-from .models import FlashcardDeck, Flashcard
+from .models import FlashcardDeck, Flashcard, Review
 
 class FlashcardForm(forms.ModelForm):
     class Meta:
@@ -16,3 +16,7 @@ class FlashcardDeckForm(forms.ModelForm):
         model = FlashcardDeck
         fields = ['name', 'description']
 
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['text', 'stars']

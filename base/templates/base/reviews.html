@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit a Review</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .star-rating {
+            display: flex;
+            flex-direction: row;
+            font-size: 12.3rem;
+            cursor: pointer;
+            justify-content: center;
+        }
+
+        .star-rating span {
+            color: #ddd;
+            margin-right: 5px;
+        }
+
+        .star-rating span.selected {
+            color: gold;
+        }
+
+        .review-textbox {
+            width: 50%;
+            height: 300px;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 1rem;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: left;
+        }
+
+        button {
+            width: 50%;
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        h1 {
+    font-size: 5.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 2.4rem;
+    font-weight: semi-bold;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+
+        .reviews-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .review-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .stars-display {
+            font-size: 1.5rem;
+            color: gold;
+        }
+
+        .stars-empty {
+            font-size: 1.5rem;
+            color: #ddd;
+        }
+    </style>
+</head>  
+<body>
+    <h1>We Value Your Opinion</h1>
+    <h2>How Would You Rate Your Overall Experience?</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Star Rating Section -->
+        <div class="star-rating">
+            {% for i in "12345" %}
+                <span data-value="{{ i }}">&#9733;</span>
+            {% endfor %}
+        </div>
+        <input type="hidden" name="stars" value="0">
+
+        <!-- Comment Section -->
+        <h3>Kindly take the time to tell us what you think.</h3>
+        <textarea name="text" class="review-textbox" placeholder="Your message..."></textarea>
+
+        <!-- Submit Button -->
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>All Reviews</h2>
+    <ul>
+        {% for review in reviews %}
+            <li class="review-item">
+                <strong>{{ review.text }}</strong><br>
+                <span>Rating: 
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.stars %}
+                            <span class="stars-display">★</span>
+                        {% else %}
+                            <span class="stars-empty">☆</span>
+                        {% endif %}
+                    {% endfor %}
+                </span><br>
+                <small>{{ review.created_at }}</small>
+            </li>
+        {% empty %}
+            <li>No reviews yet. Be the first to submit one!</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        const stars = document.querySelectorAll('.star-rating span');
+        const starsInput = document.querySelector('[name="stars"]');
+
+        function setStarRating(selectedValue) {
+            starsInput.value = selectedValue;
+
+            stars.forEach(star => {
+                if (parseInt(star.getAttribute('data-value')) <= selectedValue) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+
+        stars.forEach(star => {
+            star.addEventListener('click', function () {
+                const selectedValue = parseInt(star.getAttribute('data-value'));
+                setStarRating(selectedValue);
+            });
+        });
+    </script>
+</body>  
+</html>

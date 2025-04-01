@@ -1,7 +1,7 @@
 from django.shortcuts import render,  redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import FlashcardDeck, Flashcard
-from .forms import FlashcardDeckForm, FlashcardForm
+from .models import FlashcardDeck, Flashcard, Review
+from .forms import FlashcardDeckForm, FlashcardForm, ReviewForm
 
 def home_view(request):
     """
@@ -107,3 +107,16 @@ def timer_page(request):
     Render the timer page with toggle functionality
     """
     return render(request, 'base/timer.html')
+
+def review_page(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('review_page')
+    else:
+        form = ReviewForm()
+    
+    reviews = Review.objects.all()
+
+    return render(request, 'base/reviews.html', {'form': form, 'reviews': reviews})
