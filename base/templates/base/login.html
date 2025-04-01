@@ -44,15 +44,15 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form id="loginForm"> <!-- Added id="loginForm" -->
-            <input type="text" id="username" placeholder="Username" required> <!-- Added id="username" -->
-            <input type="password" id="password" placeholder="Password" required> <!-- Added id="password" -->
+        <form id="loginForm"> 
+            <input type="text" id="username" placeholder="Username" required> 
+            <input type="password" id="password" placeholder="Password" required> 
             <button type="submit">Login</button>
         </form>
     </div>
 
     <script>
-       document.getElementById("loginForm").addEventListener("submit", function(event) { // Fixed syntax
+       document.getElementById("loginForm").addEventListener("submit", function(event) { 
             event.preventDefault(); // Prevent form submission
 
             var username = document.getElementById("username").value;
