@@ -1,0 +1,88 @@
+# --- Python ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# --- Django Specific ---
+*.log
+local_settings.py  # If you ever create a separate local settings
+db.sqlite3         # Your SQLite database file
+db.sqlite3-journal # SQLite journal file (if generated)
+media/             # Optional: Ignore if you store user uploads here
+staticfiles/       # Optional: Ignore if you run collectstatic
+
+# --- Virtual Environments ---
+.env               # IMPORTANT: Ignore your environment variables file!
+.venv
+env/
+venv/              # Standard venv name (you have one named this)
+ENV/
+env.bak/
+venv.bak/
+genai-env/         # Your specific virtual environment folder
+
+# --- IDE / Editor Specific Files ---
+.idea/             # JetBrains IDEs (PyCharm, etc.)
+.vscode/           # Visual Studio Code
+*.sublime-project
+*.sublime-workspace
+
+# --- OS Specific Files ---
+.DS_Store          # macOS
+Thumbs.db          # Windows
+
+# --- Other Project Specific Files ---
+# ProjectGroup2-Des.../ # Uncomment this line if this folder and its contents
+                       # (like ICE 5-2.txt) should NOT be tracked by Git.
+                       # Add specific file patterns inside if needed.
