@@ -10,11 +10,27 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# --- V V V --- GOOGLE AI API KEY --- V V V ---
+
+# Load environment variables from .env file in the project root
+# Make sure your .env file is in the same directory as manage.py
+load_dotenv(os.path.join(BASE_DIR, '.env'))
+
+# Get the API key from the environment variable
+GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+
+# Optional check: You can add this during development to make sure the key loaded
+if not GOOGLE_API_KEY:
+    print("Warning: GOOGLE_API_KEY not found in .env file or environment variables.") # Check terminal output when running runserver
+
+# --- ^ ^ ^ --- GOOGLE AI API KEY --- ^ ^ ^ ---
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
