@@ -25,4 +25,10 @@ class Review(models.Model):
     stars = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     
-
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
+    
+    
+    def __str__(self):
+        return self.user.username 
