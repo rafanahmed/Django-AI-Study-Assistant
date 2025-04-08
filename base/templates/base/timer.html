@@ -181,34 +181,34 @@ document.addEventListener('DOMContentLoaded', function() {
         startPauseBtn.textContent = 'Pause';
         resetBtn.disabled = false;
     }
-    
+       
     function startCountdown() {
         const hours = parseInt(hoursInput.value) || 0;
         const minutes = parseInt(minutesInput.value) || 0;
         const seconds = parseInt(secondsInput.value) || 0;
-        
         if (hours === 0 && minutes === 0 && seconds === 0) {
             alert('Please set a countdown time');
             return;
         }
-        
+
         const totalMilliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000;
         countdownEndTime = Date.now() + totalMilliseconds;
         
+        timerText.textContent = formatTime(totalMilliseconds);
         timer = setInterval(() => {
             const remainingTime = countdownEndTime - Date.now();
-            
+
             if (remainingTime <= 0) {
                 clearInterval(timer);
                 timerText.textContent = '00:00:00';
                 startPauseBtn.textContent = 'Start';
+                isRunning = false;
                 alert('Countdown finished!');
                 return;
             }
-            
+
             timerText.textContent = formatTime(remainingTime);
-        }, 1000);
-        
+        }, 100);
         startPauseBtn.textContent = 'Pause';
         resetBtn.disabled = false;
     }

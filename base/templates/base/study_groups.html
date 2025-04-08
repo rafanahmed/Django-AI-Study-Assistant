@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'base/css/study_groups.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Study Groups</h2>
+      <a href="{% url 'create_study_group' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Create Group
+      </a>
+    </div>
+    
+    <h4>Your Groups</h4>
+    {% if user_groups %}
+      <div class="row">
+        {% for group in user_groups %}
+          <div class="col-md-6">
+            <div class="study-group">
+              <a href="{% url 'study_group_detail' group.id %}" class="text-decoration-none">
+                <h5>{{ group.name }}</h5>
+                <p>{{ group.description|truncatechars:100 }}</p>
+                <small>Members: {{ group.members.count }}</small>
+              </a>
+              <a href="{% url 'leave_study_group' group.id %}" class="btn btn-sm btn-outline-danger mt-2">Leave Group</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>You haven't joined any study groups yet.</p>
+    {% endif %}
+
+    <h4 class="mt-4">Available Groups</h4>
+    {% if all_groups %}
+      <div class="row">
+        {% for group in all_groups %}
+          <div class="col-md-6">
+            <div class="study-group d-flex justify-content-between">
+              <div>
+                <h5>{{ group.name }}</h5>
+                <p>{{ group.description|truncatechars:100 }}</p>
+                <small>Members: {{ group.members.count }}</small>
+              </div>
+              <div>
+                <a href="{% url 'join_study_group' group.id %}" class="btn btn-sm btn-primary">Join</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No study groups available.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

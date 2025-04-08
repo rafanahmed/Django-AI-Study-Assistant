@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import FlashcardDeck, Flashcard, Review
+from .models import StudyGroup, GroupMessage
 class RegisterForm(UserCreationForm):
     # fields we want to include and customize in our form
     first_name = forms.CharField(max_length=100,
@@ -95,3 +96,16 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ['text', 'stars']
+
+class StudyGroupForm(forms.ModelForm):
+    class Meta:
+        model = StudyGroup
+        fields = ['name', 'description']
+
+class GroupMessageForm(forms.ModelForm):
+    class Meta:
+        model = GroupMessage
+        fields = ['content']
+        widgets = {
+            'content': forms.TextInput(attrs={'placeholder': 'Type your message...', 'class': 'message-input'})
+        }

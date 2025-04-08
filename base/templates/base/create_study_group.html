@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% load static %}  <!-- Add this at the top of each template -->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'base/css/study_groups.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h3>Create New Study Group</h3>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">Create Group</button>
+          <a href="{% url 'study_groups' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
