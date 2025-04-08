@@ -19,3 +19,4 @@ urlpatterns = [
     path('timer/', views.timer_page, name='timer'),
     path('reviews/', views.review_page, name='review_page'),
 ]
+
