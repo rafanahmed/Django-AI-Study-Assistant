@@ -21,9 +21,13 @@ class Flashcard(models.Model):
     tags = models.CharField(max_length=255, blank=True, null=True)  # Example field for tags
 
 class Review(models.Model):
-    text = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     stars = models.IntegerField()
+    text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Review by {self.user.username if self.user else 'Anonymous'}"
     
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

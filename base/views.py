@@ -144,10 +144,20 @@ def review_page(request):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
-            form.save()
+            review = form.save(commit=False)
+            review.user = request.user  # Associate the current user
+            review.save()
             return redirect('review_page')
+    
+    sort_by = request.GET.get('sort', 'date')
+    
+    if sort_by == 'rating':
+        reviews = Review.objects.all().order_by('-stars', '-created_at')
     else:
-        form = ReviewForm()
-
-    reviews = Review.objects.all()
-    return render(request, 'base/reviews.html', {'form': form, 'reviews': reviews})
+        reviews = Review.objects.all().order_by('-created_at')
+    
+    form = ReviewForm()
+    return render(request, 'base/reviews.html', {
+        'form': form,
+        'reviews': reviews
+    })
