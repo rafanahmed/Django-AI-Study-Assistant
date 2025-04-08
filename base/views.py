@@ -13,18 +13,16 @@ from django.http import JsonResponse
 
 
 def login_view(request):
-    
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)  # Use Django's built-in AuthenticationForm
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            user = form.get_user()  # Get the authenticated user
-            login(request, user)  # Log the user in
-            return redirect('home')  # Redirect to the home page
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
         else:
-            messages.error(request, 'Invalid username or password.')  # Show error message if form is invalid
+            messages.error(request, 'Invalid username or password.')
     else:
-        form = AuthenticationForm()  # Initialize an empty form for GET requests
-
+        form = AuthenticationForm()
     return render(request, 'base/login.html', {'form': form})
 
 def register(request):
@@ -66,7 +64,7 @@ def create_deck_view(request):
         form = FlashcardDeckForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('flashcards')  # Changed from 'deck_list' to 'flashcards'
+            return redirect('flashcards')
     else:
         form = FlashcardDeckForm()
     return render(request, 'base/create_deck.html', {'form': form})
@@ -94,12 +92,10 @@ def study_flashcards_view(request, deck_id):
     cards = deck.flashcards.all()
     current_card_index = int(request.GET.get('card', 0))
 
-    # Handle empty deck case
     if not cards.exists():
         messages.warning(request, "This deck is empty. Add flashcards to study.")
         return redirect('deck_detail', deck_id=deck.id)
 
-    # Ensure current_card_index is within bounds
     if current_card_index >= len(cards):
         current_card_index = 0
         current_card = cards[0]
@@ -150,7 +146,7 @@ def review_page(request):
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.user = request.user  # Associate the current user
+            review.user = request.user
             review.save()
             return redirect('review_page')
     
@@ -159,11 +155,13 @@ def review_page(request):
     if sort_by == 'rating':
         reviews = Review.objects.all().order_by('-stars', '-created_at')
     else:
-<<<<<<< HEAD
-        form = ReviewForm()
-
-    reviews = Review.objects.all()
-    return render(request, 'base/reviews.html', {'form': form, 'reviews': reviews})
+        reviews = Review.objects.all().order_by('-created_at')
+    
+    form = ReviewForm()
+    return render(request, 'base/reviews.html', {
+        'form': form,
+        'reviews': reviews
+    })
 
 @login_required
 def study_groups_view(request):
@@ -183,7 +181,6 @@ def create_study_group(request):
             group = form.save(commit=False)
             group.created_by = request.user
             group.save()
-            # Add the creator as a member
             group.members.add(request.user)
             messages.success(request, f"Study group '{group.name}' created successfully!")
             return redirect('study_group_detail', group_id=group.id)
@@ -205,7 +202,6 @@ def study_group_detail(request, group_id):
             message.sender = request.user
             message.save()
             
-            # Return JSON response for WebSocket fallback
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({
                     'status': 'success',
@@ -243,12 +239,3 @@ def leave_study_group(request, group_id):
         messages.info(request, f"You've left '{group.name}'")
     
     return redirect('study_groups')
-=======
-        reviews = Review.objects.all().order_by('-created_at')
-    
-    form = ReviewForm()
-    return render(request, 'base/reviews.html', {
-        'form': form,
-        'reviews': reviews
-    })
->>>>>>> 6a01a74ac68b78601069c69dbdc6f14c90f307e0

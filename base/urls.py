@@ -18,15 +18,9 @@ urlpatterns = [
     
     path('timer/', views.timer_page, name='timer'),
     path('reviews/', views.review_page, name='review_page'),
-<<<<<<< HEAD
     path('study-groups/', views.study_groups_view, name='study_groups'),
     path('study-groups/create/', views.create_study_group, name='create_study_group'),
     path('study-groups/<int:group_id>/', views.study_group_detail, name='study_group_detail'),
     path('study-groups/<int:group_id>/join/', views.join_study_group, name='join_study_group'),
     path('study-groups/<int:group_id>/leave/', views.leave_study_group, name='leave_study_group'),
-    
 ]
-=======
-]
-
->>>>>>> 6a01a74ac68b78601069c69dbdc6f14c90f307e0
