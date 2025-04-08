@@ -10,51 +10,69 @@
     
     <!-- Custom CSS Block (optional) -->
     {% block extra_css %}{% endblock %}
+    
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .content-wrapper {
+            flex: 1 0 auto;
+        }
+        .footer {
+            flex-shrink: 0;
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
     {% include 'base/navbar.html' %}
 
     <!-- Main Content Area -->
-    <div class="container mt-4">
-        {% block content %}
-        <div class="row">
-            <div class="col-md-8 offset-md-2 text-center">
-                <h1 class="display-4">Welcome to AI Study Assistant</h1>
-                <p class="lead">Your intelligent companion for learning and studying</p>
-                
-                <div class="row mt-4">
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Study Sessions</h5>
-                                <p class="card-text">Create and manage your study sessions</p>
-                                <a href="{% url 'study_sessions' %}" class="btn btn-primary">Get Started</a>
+    <div class="content-wrapper">
+        <div class="container mt-4">
+            {% block content %}
+            <div class="row">
+                <div class="col-md-8 offset-md-2 text-center">
+                    <h1 class="display-4">Welcome to AI Study Assistant</h1>
+                    <p class="lead">Your intelligent companion for learning and studying</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Study Sessions</h5>
+                                    <p class="card-text">Create and manage your study sessions</p>
+                                    <a href="{% url 'study_sessions' %}" class="btn btn-primary">Get Started</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Learning Resources</h5>
-                                <p class="card-text">Access curated study materials</p>
-                                <a href="{% url 'resources' %}" class="btn btn-secondary">Explore</a>
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">Learning Resources</h5>
+                                    <p class="card-text">Access curated study materials</p>
+                                    <a href="{% url 'resources' %}" class="btn btn-secondary">Explore</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">About Us</h5>
-                                <p class="card-text">Learn more about our mission</p>
-                                <a href="{% url 'about' %}" class="btn btn-info">Learn More</a>
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title">About Us</h5>
+                                    <p class="card-text">Learn more about our mission</p>
+                                    <a href="{% url 'about' %}" class="btn btn-info">Learn More</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {% endblock %}
         </div>
-        {% endblock %}
     </div>
 
     <!-- Footer -->

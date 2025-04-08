@@ -1,165 +1,163 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit a Review</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
+{% extends 'base/base.html' %}
+{% load static %}
 
-        .star-rating {
-            display: flex;
-            flex-direction: row;
-            font-size: 12.3rem;
-            cursor: pointer;
-            justify-content: center;
-        }
-
-        .star-rating span {
-            color: #ddd;
-            margin-right: 5px;
-        }
-
-        .star-rating span.selected {
-            color: gold;
-        }
-
-        .review-textbox {
-            width: 50%;
-            height: 300px;
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 1rem;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: left;
-        }
-
-        button {
-            width: 50%;
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-
-        h1 {
-    font-size: 5.5rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-h2 {
-    font-size: 2.4rem;
-    font-weight: semi-bold;
-    margin-bottom: 15px;
-}
-
-h3 {
-    font-size: 2.5rem;
-    font-weight: normal;
-    margin-bottom: 10px;
-}
-
-
-        .reviews-container {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .review-item {
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-
-        .stars-display {
-            font-size: 1.5rem;
-            color: gold;
-        }
-
-        .stars-empty {
-            font-size: 1.5rem;
-            color: #ddd;
-        }
-    </style>
-</head>  
-<body>
-    <h1>We Value Your Opinion</h1>
-    <h2>How Would You Rate Your Overall Experience?</h2>
+{% block content %}
+<div class="container my-5">
+    <h1 class="display-4 mb-4">We Value Your Opinion</h1>
+    <h2 class="mb-4">How Would You Rate Your Overall Experience?</h2>
     
-    <form method="post">
+    {% if user.is_authenticated %}
+    <form method="post" class="mb-5">
         {% csrf_token %}
         
         <!-- Star Rating Section -->
-        <div class="star-rating">
+        <div class="star-rating mb-3">
             {% for i in "12345" %}
-                <span data-value="{{ i }}">&#9733;</span>
+                <span data-value="{{ i }}" class="star">★</span>
             {% endfor %}
         </div>
-        <input type="hidden" name="stars" value="0">
+        <input type="hidden" name="stars" id="stars-input" value="0">
 
         <!-- Comment Section -->
-        <h3>Kindly take the time to tell us what you think.</h3>
-        <textarea name="text" class="review-textbox" placeholder="Your message..."></textarea>
+        <h3 class="mb-3">Kindly take the time to tell us what you think.</h3>
+        <textarea name="text" class="form-control mb-3" rows="5" placeholder="Your message..."></textarea>
 
         <!-- Submit Button -->
-        <button type="submit">Submit</button>
+        <button type="submit" class="btn btn-dark btn-lg">Submit Review</button>
     </form>
+    {% else %}
+    <div class="alert alert-info mb-5">
+        <p>Please <a href="{% url 'login' %}?next={% url 'review_page' %}" class="alert-link">login</a> to submit a review.</p>
+    </div>
+    {% endif %}
 
-    <h2>All Reviews</h2>
-    <ul>
+    <!-- Sorting Options -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">All Reviews</h2>
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort by: {% if request.GET.sort == 'rating' %}Rating{% else %}Newest{% endif %}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                <li><a class="dropdown-item" href="?sort=date">Newest First</a></li>
+                <li><a class="dropdown-item" href="?sort=rating">Highest Rating</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="reviews-container">
         {% for review in reviews %}
-            <li class="review-item">
-                <strong>{{ review.text }}</strong><br>
-                <span>Rating: 
-                    {% for i in "12345" %}
-                        {% if forloop.counter <= review.stars %}
-                            <span class="stars-display">★</span>
-                        {% else %}
-                            <span class="stars-empty">☆</span>
-                        {% endif %}
-                    {% endfor %}
-                </span><br>
-                <small>{{ review.created_at }}</small>
-            </li>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div class="stars-display">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.stars %}
+                                    <span class="text-warning">★</span>
+                                {% else %}
+                                    <span class="text-secondary">☆</span>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="ms-2">{{ review.stars }}.0</span>
+                        </div>
+                        <small class="text-muted">{{ review.created_at|date:"F j, Y" }}</small>
+                    </div>
+                    <p class="card-text">{{ review.text }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            {% if review.user %}
+                                <i class="bi bi-person-fill"></i> 
+                                {% if review.user.get_full_name %}
+                                    {{ review.user.get_full_name }}
+                                {% else %}
+                                    {{ review.user.username }}
+                                {% endif %}
+                            {% else %}
+                                <i class="bi bi-person-fill"></i> Anonymous
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            </div>
         {% empty %}
-            <li>No reviews yet. Be the first to submit one!</li>
+            <div class="alert alert-light">
+                No reviews yet. Be the first to submit one!
+            </div>
         {% endfor %}
-    </ul>
+    </div>
+</div>
 
-    <script>
-        const stars = document.querySelectorAll('.star-rating span');
-        const starsInput = document.querySelector('[name="stars"]');
+<style>
+    .star-rating {
+        display: flex;
+        justify-content: center;
+        font-size: 3rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+    }
+    
+    .star-rating .star {
+        color: #ddd;
+        margin: 0 5px;
+        transition: color 0.2s;
+    }
+    
+    .star-rating .star.selected,
+    .star-rating .star:hover {
+        color: gold;
+    }
+    
+    .star-rating .star:hover ~ .star {
+        color: #ddd;
+    }
+    
+    textarea {
+        min-height: 150px;
+    }
+    
+    .stars-display .text-warning {
+        color: gold !important;
+    }
+</style>
 
-        function setStarRating(selectedValue) {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.star-rating .star');
+        const starsInput = document.getElementById('stars-input');
+        
+        function setRating(selectedValue) {
             starsInput.value = selectedValue;
-
-            stars.forEach(star => {
-                if (parseInt(star.getAttribute('data-value')) <= selectedValue) {
+            stars.forEach((star, index) => {
+                if (index < selectedValue) {
                     star.classList.add('selected');
                 } else {
                     star.classList.remove('selected');
                 }
             });
         }
-
+        
         stars.forEach(star => {
-            star.addEventListener('click', function () {
-                const selectedValue = parseInt(star.getAttribute('data-value'));
-                setStarRating(selectedValue);
+            star.addEventListener('click', function() {
+                const value = parseInt(this.getAttribute('data-value'));
+                setRating(value);
+            });
+            
+            star.addEventListener('mouseover', function() {
+                const value = parseInt(this.getAttribute('data-value'));
+                stars.forEach((s, i) => {
+                    if (i < value) {
+                        s.classList.add('selected');
+                    } else {
+                        s.classList.remove('selected');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseout', function() {
+                const currentRating = parseInt(starsInput.value);
+                setRating(currentRating);
             });
         });
-    </script>
-</body>  
-</html>
+    });
+</script>
+{% endblock %}

@@ -141,7 +141,14 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+<<<<<<< HEAD
 ASGI_APPLICATION = 'ai_study_assistant.routing.application'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'base/static'),
 ]
+=======
+# In your settings.py
+LOGIN_URL = 'login'  # The name of your login URL pattern
+LOGIN_REDIRECT_URL = 'home'  # Where to redirect after login
+LOGOUT_REDIRECT_URL = 'home'  # Where to redirect after logout
+>>>>>>> 6a01a74ac68b78601069c69dbdc6f14c90f307e0

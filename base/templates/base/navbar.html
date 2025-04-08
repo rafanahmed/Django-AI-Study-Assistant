@@ -14,44 +14,65 @@
     <!-- Navigation Links -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- Show login link only when NOT authenticated -->
+        {% if not user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link fw-bold" href="{% url 'login' %}">Login</a>
         </li>
-        {% if user.is_authenticated %}
+        {% endif %}
+        
+        <!-- Public navigation links (shown to all users) -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'home' %}">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'about' %}">About</a>
         </li>
-        
         <li class="nav-item">
           <a class="nav-link" href="{% url 'study_sessions' %}">Study Sessions</a>
         </li>
-        
         <li class="nav-item">
           <a class="nav-link" href="{% url 'timer' %}">Timer</a>
         </li>
-        
         <li class="nav-item">
           <a class="nav-link" href="{% url 'resources' %}">Resources</a>
         </li>
-        
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'flashcards' %}">Flashcards</a>
-          </li>
-          
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'review_page' %}">Reviews</a>
+          <a class="nav-link" href="{% url 'flashcards' %}">Flashcards</a>
         </li>
         <li class="nav-item">
+<<<<<<< HEAD
           <a class="nav-link" href="{% url 'study_groups' %}">Study Groups</a>
         </li>
         <li class="nav-item">
           <a class="nav-link fw-bold" href="{% url 'logout' %}">Logout</a>
+=======
+          <a class="nav-link" href="{% url 'review_page' %}">Reviews</a>
+>>>>>>> 6a01a74ac68b78601069c69dbdc6f14c90f307e0
         </li>
-        {% endif %}
       </ul>
+      
+      <!-- User Profile Section (shown only when authenticated) -->
+      {% if user.is_authenticated %}
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle me-1"></i>
+            {% if user.first_name or user.last_name %}
+              {{ user.first_name }} {{ user.last_name }}
+            {% else %}
+              {{ user.username }}
+            {% endif %}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item fw-bold text-danger" href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+      {% endif %}
     </div>
   </div>
 </nav>

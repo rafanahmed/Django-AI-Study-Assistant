@@ -13,9 +13,12 @@ urlpatterns = [
     path('flashcards/create-deck/', views.create_deck_view, name='create_deck'),
     path('flashcards/deck/<int:deck_id>/', views.deck_detail_view, name='deck_detail'),
     path('deck/<int:deck_id>/study/', views.study_flashcards_view, name='study_flashcards'),
+    path('flashcards/deck/<int:deck_id>/delete/<int:card_id>/', views.delete_flashcard_view, name='delete_flashcard'),
+    path('flashcards/delete-deck/<int:deck_id>/', views.delete_deck_view, name='delete_deck'),
     
     path('timer/', views.timer_page, name='timer'),
     path('reviews/', views.review_page, name='review_page'),
+<<<<<<< HEAD
     path('study-groups/', views.study_groups_view, name='study_groups'),
     path('study-groups/create/', views.create_study_group, name='create_study_group'),
     path('study-groups/<int:group_id>/', views.study_group_detail, name='study_group_detail'),
@@ -23,3 +26,7 @@ urlpatterns = [
     path('study-groups/<int:group_id>/leave/', views.leave_study_group, name='leave_study_group'),
     
 ]
+=======
+]
+
+>>>>>>> 6a01a74ac68b78601069c69dbdc6f14c90f307e0
