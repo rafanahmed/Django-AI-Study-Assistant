@@ -61,7 +61,7 @@ def create_deck_view(request):
         form = FlashcardDeckForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('deck_list')
+            return redirect('flashcards')  # Changed from 'deck_list' to 'flashcards'
     else:
         form = FlashcardDeckForm()
     return render(request, 'base/create_deck.html', {'form': form})
@@ -89,11 +89,17 @@ def study_flashcards_view(request, deck_id):
     cards = deck.flashcards.all()
     current_card_index = int(request.GET.get('card', 0))
 
-    if current_card_index < len(cards):
-        current_card = cards[current_card_index]
-    else:
-        current_card = cards[0]
+    # Handle empty deck case
+    if not cards.exists():
+        messages.warning(request, "This deck is empty. Add flashcards to study.")
+        return redirect('deck_detail', deck_id=deck.id)
+
+    # Ensure current_card_index is within bounds
+    if current_card_index >= len(cards):
         current_card_index = 0
+        current_card = cards[0]
+    else:
+        current_card = cards[current_card_index]
 
     next_card_index = (current_card_index + 1) % len(cards)
     prev_card_index = (current_card_index - 1) % len(cards)
@@ -107,8 +113,31 @@ def study_flashcards_view(request, deck_id):
         'total_cards': len(cards),
     })
 
+@login_required
+def delete_flashcard_view(request, deck_id, card_id):
+    deck = get_object_or_404(FlashcardDeck, id=deck_id)
+    flashcard = get_object_or_404(Flashcard, id=card_id, deck=deck)
+    
+    if request.method == 'POST':
+        flashcard.delete()
+        messages.success(request, 'Flashcard deleted successfully!')
+        return redirect('deck_detail', deck_id=deck.id)
+    
+    return redirect('deck_detail', deck_id=deck.id)
+
 def timer_page(request):
     return render(request, 'base/timer.html')
+
+@login_required
+def delete_deck_view(request, deck_id):
+    deck = get_object_or_404(FlashcardDeck, id=deck_id)
+    
+    if request.method == 'POST':
+        deck.delete()
+        messages.success(request, 'Deck deleted successfully!')
+        return redirect('flashcards')
+    
+    return redirect('flashcards')
 
 @login_required
 def review_page(request):
