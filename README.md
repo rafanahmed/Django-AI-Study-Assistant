@@ -58,10 +58,10 @@ Your terminal prompt should now change, usually showing `(genai-env)` at the beg
 
 **4. Install Dependencies:**
 
-Install the required Python packages using pip. The essential packages are Django, the Google Generative AI client, and python-dotenv.
+Install the required Python packages using pip. The essential packages are Django, the Google Generative AI client, python-dotenv, and channels for asynchronous support in Django.
 
 ```bash
-pip install django google-generativeai python-dotenv
+pip install django google-generativeai python-dotenv channels
 ```
 
 > **Optional Best Practice:** For easier dependency management, especially in teams, create a `requirements.txt` file listing the dependencies:
