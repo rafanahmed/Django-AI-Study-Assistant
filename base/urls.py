@@ -18,6 +18,8 @@ urlpatterns = [
     
     path('timer/', views.timer_page, name='timer'),
     path('reviews/', views.review_page, name='review_page'),
+    path('reviews/edit/<int:review_id>/', views.edit_review, name='edit_review'),
+    path('review/delete/<int:review_id>/', views.delete_review, name='delete_review'),
     path('study-groups/', views.study_groups_view, name='study_groups'),
     path('study-groups/create/', views.create_study_group, name='create_study_group'),
     path('study-groups/<int:group_id>/', views.study_group_detail, name='study_group_detail'),

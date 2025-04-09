@@ -164,6 +164,42 @@ def review_page(request):
     })
 
 @login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+
+    if review.user != request.user and not request.user.is_staff:
+        messages.error(request, "You are not authorized to edit this review.")
+        return redirect('review_page')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Review updated successfully!")
+            return redirect('review_page')
+    else:
+        form = ReviewForm(instance=review)
+
+    return render(request, 'base/edit_review.html', {'form': form, 'review': review})
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+
+    if review.user != request.user and not request.user.is_staff:
+        messages.error(request, "You are not authorized to delete this review.")
+        return redirect('review_page')
+
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, "Review deleted successfully!")
+        return redirect('review_page')
+
+    return render(request, 'base/confirm_delete_review.html', {'review': review})
+
+
+
+@login_required
 def study_groups_view(request):
     user_groups = request.user.study_groups.all()
     all_groups = StudyGroup.objects.all()

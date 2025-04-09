@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="container my-5">
-    <h1 class="display-4 mb-4">We Value Your Opinion</h1>
-    <h2 class="mb-4">How Would You Rate Your Overall Experience?</h2>
+    <h1 class="display-4 mb-4 text-center">We Value Your Opinion</h1>
+    <h2 class="mb-4 text-center">How Would You Rate Your Overall Experience?</h2>
     
     {% if user.is_authenticated %}
     <form method="post" class="mb-5">
@@ -19,7 +19,7 @@
         <input type="hidden" name="stars" id="stars-input" value="0">
 
         <!-- Comment Section -->
-        <h3 class="mb-3">Kindly take the time to tell us what you think.</h3>
+        <h3 class="mb-3 text-center">Kindly take the time to tell us what you think.</h3>
         <textarea name="text" class="form-control mb-3" rows="5" placeholder="Your message..."></textarea>
 
         <!-- Submit Button -->
@@ -76,6 +76,15 @@
                                 <i class="bi bi-person-fill"></i> Anonymous
                             {% endif %}
                         </small>
+                        {% if review.user == user or user.is_staff %}
+                        <div class="d-flex">
+                            <a href="{% url 'edit_review' review.id %}" class="btn btn-outline-primary btn-sm me-2">Edit</a>
+                            <form method="post" action="{% url 'delete_review' review.id %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    {% endif %}
                     </div>
                 </div>
             </div>
@@ -91,14 +100,14 @@
     .star-rating {
         display: flex;
         justify-content: center;
-        font-size: 3rem;
+        font-size: 6rem;
         cursor: pointer;
         margin-bottom: 1rem;
     }
     
     .star-rating .star {
         color: #ddd;
-        margin: 0 5px;
+        margin:  3px;
         transition: color 0.2s;
     }
     
@@ -117,6 +126,10 @@
     
     .stars-display .text-warning {
         color: gold !important;
+    }
+    .btn-lg {
+        width: 100%;
+        padding: 15px 0;
     }
 </style>
 

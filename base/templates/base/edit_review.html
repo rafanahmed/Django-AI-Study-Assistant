@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h1 class="display-4 mb-4">Edit Your Review</h1>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Star Rating Section -->
+        <div class="star-rating mb-3">
+            {% for i in "12345" %}
+                <span data-value="{{ i }}" class="star {% if i <= review.stars %}selected{% endif %}">★</span>
+            {% endfor %}
+        </div>
+        <input type="hidden" name="stars" id="stars-input" value="{{ review.stars }}">
+
+        <!-- Comment Section -->
+        <h3 class="mb-3">Kindly take the time to update your feedback.</h3>
+        <textarea name="text" class="form-control mb-3" rows="5" placeholder="Your message...">{{ review.text }}</textarea>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-dark btn-lg">Update Review</button>
+    </form>
+</div>
+
+<!-- Styles for Star Rating -->
+<style>
+    .star-rating {
+        display: flex;
+        justify-content: center;
+        font-size: 3rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+    }
+    
+    .star-rating .star {
+        color: #ddd;
+        margin: 0 5px;
+        transition: color 0.2s;
+    }
+    
+    .star-rating .star.selected,
+    .star-rating .star:hover {
+        color: gold;
+    }
+    
+    .star-rating .star:hover ~ .star {
+        color: #ddd;
+    }
+    
+    textarea {
+        min-height: 150px;
+    }
+    
+    .stars-display .text-warning {
+        color: gold !important;
+    }
+</style>
+
+<!-- JavaScript for Star Rating -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.star-rating .star');
+        const starsInput = document.getElementById('stars-input');
+        
+        function setRating(selectedValue) {
+            starsInput.value = selectedValue;
+            stars.forEach((star, index) => {
+                if (index < selectedValue) {
+                    star.classList.add('selected');
+                } else {
+                    star.classList.remove('selected');
+                }
+            });
+        }
+        
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const value = parseInt(this.getAttribute('data-value'));
+                setRating(value);
+            });
+            
+            star.addEventListener('mouseover', function() {
+                const value = parseInt(this.getAttribute('data-value'));
+                stars.forEach((s, i) => {
+                    if (i < value) {
+                        s.classList.add('selected');
+                    } else {
+                        s.classList.remove('selected');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseout', function() {
+                const currentRating = parseInt(starsInput.value);
+                setRating(currentRating);
+            });
+        });
+    });
+</script>
+
+{% endblock %}
