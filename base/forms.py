@@ -109,3 +109,26 @@ class GroupMessageForm(forms.ModelForm):
         widgets = {
             'content': forms.TextInput(attrs={'placeholder': 'Type your message...', 'class': 'message-input'})
         }
+
+# --- Added AI Interaction Feature Form ---
+class QuestionnaireForm(forms.Form):
+    """
+    A simple form to capture the user's answer to a specific question
+    for the AI interaction feature.
+    """
+    user_answer = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'rows': 4,
+            'placeholder': 'Enter your response here...',
+            'class': 'form-control' # Added for consistency
+        }),
+        label="Your Answer",
+        required=True
+    )
+    # Hidden field to carry the original question text along with the submission.
+    # Value set in the view/template.
+    question_text = forms.CharField(widget=forms.HiddenInput())
+
+    # Hidden field to carry the section identifier (e.g., 'online-tutorials').
+    # Value set in the view/template.
+    section = forms.CharField(widget=forms.HiddenInput())

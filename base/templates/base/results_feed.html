@@ -1,0 +1,79 @@
+{# base/templates/base/results_feed.html #}
+{% extends "base/base.html" %} {# Assumes you have a base template #}
+{% load static %} {# If you need static files #}
+
+{% block title %}My AI Interaction History{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>My AI Interaction History</h2>
+    <hr>
+
+    {# Section to display Django messages (like login/logout status) #}
+    {% if messages %}
+        <div class="messages mb-3">
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Section to display the actual AI interactions #}
+    {% if interactions %}
+        <p>Here are your past AI interactions:</p>
+        <div class="list-group">
+            {# Loop through each interaction passed from the view #}
+            {% for interaction in interactions %}
+                <div class="list-group-item list-group-item-action flex-column align-items-start mb-3 shadow-sm rounded">
+                    <div class="d-flex w-100 justify-content-between">
+                        {# Display the section name (e.g., Online-Tutorials) - Removed invalid 'replace' filter #}
+                        <h5 class="mb-1">Section: {{ interaction.section|title }}</h5>
+                        {# Display the timestamp #}
+                        <small class="text-muted">{{ interaction.timestamp|date:"Y-m-d H:i" }}</small>
+                    </div>
+                    <hr class="my-2">
+                    {# Display the question asked #}
+                    <p class="mb-1"><strong>Question:</strong> {{ interaction.question_text }}</p>
+                    {# Display the user's answer #}
+                    <p class="mb-1"><strong>Your Answer:</strong> {{ interaction.user_answer|linebreaksbr }}</p>
+
+                    {# Display the AI's response #}
+                    {% if interaction.ai_response %}
+                         <div class="mt-2 p-3 bg-light border rounded">
+                              <p class="mb-1"><strong>AI Response:</strong></p>
+                              {# Check if it was an error message we stored #}
+                              {% if "Error generating response" in interaction.ai_response or "Error: AI model not initialized" in interaction.ai_response or "Response could not be generated" in interaction.ai_response %}
+                                   <p class="text-danger fst-italic">{{ interaction.ai_response }}</p>
+                              {% else %}
+                                   {# Display normal AI response with line breaks #}
+                                   <p class="mb-0">{{ interaction.ai_response|linebreaksbr }}</p>
+                              {% endif %}
+                         </div>
+                    {% else %}
+                         {# Handle cases where AI response might be empty/null #}
+                         <p class="mt-2 text-muted fst-italic">No AI response was generated or saved for this interaction.</p>
+                    {% endif %}
+                </div>
+            {% endfor %} {# End the loop through interactions #}
+        </div>
+    {% else %}
+        {# This message shows ONLY if the 'interactions' variable is empty #}
+        <div class="alert alert-info mt-3" role="alert">
+            You haven't had any interactions with the AI features yet. Visit one of the sections linked from <a href="{% url 'ai_features:resources' %}" class="alert-link">Resources</a> to get started!
+        </div>
+        {# Optional: Add direct links back to the questionnaire sections #}
+        {% endif %} {# End the check for interactions #}
+</div>
+
+{# Include Bootstrap JS if using alerts/dismissible #}
+{% block extra_js %}
+    {# <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> #}
+{% endblock %}
+
+{% endblock %}
+
+
+

@@ -7,7 +7,7 @@
     
     <!-- Add the study button -->
     <div class="text-center mb-4">
-        <a href="{% url 'study_flashcards' deck.id %}" class="btn btn-info">Study Flashcards</a>
+        <a href="{% url 'ai_features:study_flashcards' deck.id %}" class="btn btn-info">Study Flashcards</a>
     </div>
     
     <div class="row">
@@ -18,7 +18,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <h5 class="card-title">Question</h5>
-                        <form method="post" action="{% url 'delete_flashcard' deck.id card.id %}">
+                        <form method="post" action="{% url 'ai_features:delete_flashcard' deck.id card.id %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this flashcard?')">Delete</button>
                         </form>

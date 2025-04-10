@@ -10,7 +10,7 @@
   <div class="col-12">
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h2>Study Groups</h2>
-      <a href="{% url 'create_study_group' %}" class="btn btn-primary">
+      <a href="{% url 'ai_features:create_study_group' %}" class="btn btn-primary">
         <i class="bi bi-plus-circle"></i> Create Group
       </a>
     </div>
@@ -21,12 +21,12 @@
         {% for group in user_groups %}
           <div class="col-md-6">
             <div class="study-group">
-              <a href="{% url 'study_group_detail' group.id %}" class="text-decoration-none">
+              <a href="{% url 'ai_features:study_group_detail' group.id %}" class="text-decoration-none">
                 <h5>{{ group.name }}</h5>
                 <p>{{ group.description|truncatechars:100 }}</p>
                 <small>Members: {{ group.members.count }}</small>
               </a>
-              <a href="{% url 'leave_study_group' group.id %}" class="btn btn-sm btn-outline-danger mt-2">Leave Group</a>
+              <a href="{% url 'ai_features:leave_study_group' group.id %}" class="btn btn-sm btn-outline-danger mt-2">Leave Group</a>
             </div>
           </div>
         {% endfor %}
@@ -47,7 +47,7 @@
                 <small>Members: {{ group.members.count }}</small>
               </div>
               <div>
-                <a href="{% url 'join_study_group' group.id %}" class="btn btn-sm btn-primary">Join</a>
+                <a href="{% url 'ai_features:join_study_group' group.id %}" class="btn btn-sm btn-primary">Join</a>
               </div>
             </div>
           </div>

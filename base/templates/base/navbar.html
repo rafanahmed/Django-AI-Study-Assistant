@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <!-- Brand/Logo -->
-    <a class="navbar-brand" href="{% url 'home' %}">
+    <a class="navbar-brand" href="{% url 'ai_features:home' %}">
       AI Study Assistant
     </a>
     
@@ -23,28 +23,28 @@
         
         <!-- Public navigation links (shown to all users) -->
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Home</a>
+          <a class="nav-link" href="{% url 'ai_features:home' %}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}">About</a>
+          <a class="nav-link" href="{% url 'ai_features:about' %}">About</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'study_sessions' %}">Study Sessions</a>
+          <a class="nav-link" href="{% url 'ai_features:study_sessions' %}">Study Sessions</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'timer' %}">Timer</a>
+          <a class="nav-link" href="{% url 'ai_features:timer' %}">Timer</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'resources' %}">Resources</a>
+          <a class="nav-link" href="{% url 'ai_features:resources' %}">Resources</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'flashcards' %}">Flashcards</a>
+          <a class="nav-link" href="{% url 'ai_features:flashcards' %}">Flashcards</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'study_groups' %}">Study Groups</a>
+          <a class="nav-link" href="{% url 'ai_features:study_groups' %}">Study Groups</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'review_page' %}">Reviews</a>
+          <a class="nav-link" href="{% url 'ai_features:review_page' %}">Reviews</a>
         </li>
       </ul>
       
@@ -64,7 +64,7 @@
             <li><a class="dropdown-item" href="#">Profile</a></li>
             <li><a class="dropdown-item" href="#">Settings</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item fw-bold text-danger" href="{% url 'logout' %}">Logout</a></li>
+            <li><a class="dropdown-item fw-bold text-danger" href="{% url 'ai_features:logout' %}">Logout</a></li>
           </ul>
         </li>
       </ul>

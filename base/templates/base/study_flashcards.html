@@ -19,11 +19,11 @@
                 </div>
                 <button class="btn btn-secondary mt-3" id="flip-button" onclick="flipCard()">Flip Card</button>
                 <div class="mt-4">
-                    <a href="{% url 'study_flashcards' deck.id %}?card={{ prev_card_index }}" class="btn btn-outline-primary">Previous Flashcard</a>
-                    <a href="{% url 'study_flashcards' deck.id %}?card={{ next_card_index }}" class="btn btn-primary">Next Flashcard</a>
+                    <a href="{% url 'ai_features:study_flashcards' deck.id %}?card={{ prev_card_index }}" class="btn btn-outline-primary">Previous Flashcard</a>
+                    <a href="{% url 'ai_features:study_flashcards' deck.id %}?card={{ next_card_index }}" class="btn btn-primary">Next Flashcard</a>
                 </div>
                 <div class="mt-3">
-                    <a href="{% url 'deck_detail' deck.id %}" class="btn btn-danger">Back to Deck</a>
+                    <a href="{% url 'ai_features:deck_detail' deck.id %}" class="btn btn-danger">Back to Deck</a>
                 </div>
                 <p class="mt-2">Card {{ current_card_index_plus_one }} of {{ total_cards }}</p>
             </div>

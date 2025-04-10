@@ -27,7 +27,7 @@
     </form>
     {% else %}
     <div class="alert alert-info mb-5">
-        <p>Please <a href="{% url 'login' %}?next={% url 'review_page' %}" class="alert-link">login</a> to submit a review.</p>
+        <p>Please <a href="{% url 'ai_features:login' %}?next={% url 'ai_features:review_page' %}" class="alert-link">login</a> to submit a review.</p>
     </div>
     {% endif %}
 
@@ -78,8 +78,8 @@
                         </small>
                         {% if review.user == user or user.is_staff %}
                         <div class="d-flex">
-                            <a href="{% url 'edit_review' review.id %}" class="btn btn-outline-primary btn-sm me-2">Edit</a>
-                            <form method="post" action="{% url 'delete_review' review.id %}" class="d-inline">
+                            <a href="{% url 'ai_features:edit_review' review.id %}" class="btn btn-outline-primary btn-sm me-2">Edit</a>
+                            <form method="post" action="{% url 'ai_features:delete_review' review.id %}" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
                             </form>

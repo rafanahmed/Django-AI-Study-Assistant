@@ -16,7 +16,7 @@
           {% csrf_token %}
           {{ form.as_p }}
           <button type="submit" class="btn btn-primary">Create Group</button>
-          <a href="{% url 'study_groups' %}" class="btn btn-secondary">Cancel</a>
+          <a href="{% url 'ai_features:study_groups' %}" class="btn btn-secondary">Cancel</a>
         </form>
       </div>
     </div>

@@ -1,21 +1,50 @@
+{# base/templates/base/resources.html (Updated) #}
 {% extends 'base/base.html' %}
 
+{% block title %}Learning Resources{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h1 class="text-center mb-4">Learning Resources</h1>
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <p>Curated learning materials and resources will be available here.</p>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">Upcoming Resources</h5>
-                    <ul>
-                        <li>Online tutorials</li>
-                        <li>Study guides</li>
-                        <li>Recommended books and articles</li>
-                    </ul>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Learning Resources & AI Tools</h1>
+    <div class="row justify-content-center"> {# Center the content #}
+        <div class="col-md-8">
+            <p class="text-center">Access interactive AI tools related to various learning resources below.</p>
+
+            {# Card for Online Tutorials Link #}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Online Tutorials Feedback</h5>
+                    <p class="card-text">Struggling with a concept from an online tutorial? Get targeted feedback and resource suggestions.</p>
+                    {# Link to the questionnaire view with the correct section_slug and namespace #}
+                    <a href="{% url 'ai_features:questionnaire' section_slug='online-tutorials' %}" class="btn btn-primary">Get AI Feedback</a>
                 </div>
             </div>
+
+            {# Card for Study Guides Link #}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Study Guide Clarification</h5>
+                    <p class="card-text">Need further explanation on a topic from your study guides? Ask the AI for a clear explanation.</p>
+                     {# Link to the questionnaire view with the correct section_slug and namespace #}
+                    <a href="{% url 'ai_features:questionnaire' section_slug='study-guides' %}" class="btn btn-primary">Ask AI for Help</a>
+                </div>
+            </div>
+
+            {# Card for Book Recommendations Link #}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Book Recommendations</h5>
+                    <p class="card-text">Looking for your next relevant read? Describe what you're interested in and get an AI recommendation.</p>
+                     {# Link to the questionnaire view with the correct section_slug and namespace #}
+                    <a href="{% url 'ai_features:questionnaire' section_slug='recommended-books' %}" class="btn btn-primary">Get Book Recommendation</a>
+                </div>
+            </div>
+
+            {# Optional: Link to general AI History #}
+             <div class="text-center mt-4">
+                 <a href="{% url 'ai_features:results_feed' %}" class="text-secondary">View all my AI interaction history</a>
+             </div>
+
         </div>
     </div>
 </div>

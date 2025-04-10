@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 
+app_name = 'ai_features'
+
 urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.user_logout, name='logout'),   
@@ -25,4 +27,6 @@ urlpatterns = [
     path('study-groups/<int:group_id>/', views.study_group_detail, name='study_group_detail'),
     path('study-groups/<int:group_id>/join/', views.join_study_group, name='join_study_group'),
     path('study-groups/<int:group_id>/leave/', views.leave_study_group, name='leave_study_group'),
+    path('ai/q/<slug:section_slug>/', views.questionnaire_view, name='questionnaire'),
+    path('ai/results/', views.results_feed_view, name='results_feed'),
 ]
