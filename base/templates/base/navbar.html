@@ -17,7 +17,7 @@
         <!-- Show login link only when NOT authenticated -->
         {% if not user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link fw-bold" href="{% url 'login' %}">Login</a>
+          <a class="nav-link fw-bold" href="{% url 'ai_features:login' %}">Login</a>
         </li>
         {% endif %}
         
