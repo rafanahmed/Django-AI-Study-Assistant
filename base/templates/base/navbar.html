@@ -1,38 +1,47 @@
 {% load static %}
+<style>
+/* Enable dropdown on hover */
+.navbar-nav .dropdown:hover .dropdown-menu {
+  display: block;
+  margin-top: 0;
+}
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
     <!-- Brand/Logo -->
     <a class="navbar-brand" href="{% url 'ai_features:home' %}">
       AI Study Assistant
     </a>
-    
+
     <!-- Hamburger menu for mobile -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    
+
     <!-- Navigation Links -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <!-- Show login link only when NOT authenticated -->
         {% if not user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link fw-bold" href="{% url 'ai_features:login' %}">Login</a>
         </li>
         {% endif %}
-        
-        <!-- Public navigation links (shown to all users) -->
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'ai_features:study_sessions' %}">Study Sessions</a>
+
+        <!-- Resources dropdown with hover effect -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Resources
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="resourcesDropdown">
+            <li><a class="dropdown-item" href="{% url 'ai_features:study_sessions' %}">Study Overview</a></li>
+            <li><a class="dropdown-item" href="{% url 'ai_features:timer' %}">Timer</a></li>
+            <li><a class="dropdown-item" href="{% url 'ai_features:flashcards' %}">Flashcards</a></li>
+          </ul>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'ai_features:timer' %}">Timer</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'ai_features:resources' %}">Resources</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'ai_features:flashcards' %}">Flashcards</a>
+          <a class="nav-link" href="{% url 'ai_features:resources' %}">AI Tools</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ai_features:study_groups' %}">Study Groups</a>
@@ -41,8 +50,7 @@
           <a class="nav-link" href="{% url 'ai_features:review_page' %}">Reviews</a>
         </li>
       </ul>
-      
-      <!-- User Profile Section (shown only when authenticated) -->
+
       {% if user.is_authenticated %}
       <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
