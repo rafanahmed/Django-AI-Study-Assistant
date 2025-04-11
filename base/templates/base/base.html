@@ -88,342 +88,149 @@
   {% endblock %}
 </head>
 <body>
+  {% include "base/navbar.html" %}
 
-    <!-- Main Content Area -->
-    <div class="content-wrapper">
-        <div class="container mt-4">
-            {% block content %}
-            <div class="row">
-                <div class="col-md-8 offset-md-2 text-center">
-                    <h1 class="display-4">Welcome to AI Study Assistant</h1>
-                    <p class="lead">Your intelligent companion for learning and studying</p>
-                    
-                    <div class="row mt-4">
-                        <div class="col-md-4">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Study Sessions</h5>
-                                    <p class="card-text">Create and manage your study sessions</p>
-                                    <a href="{% url 'ai_features:study_sessions' %}" class="btn btn-primary">Get Started</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Learning Resources</h5>
-                                    <p class="card-text">Access curated study materials</p>
-                                    <a href="{% url 'ai_features:resources' %}" class="btn btn-secondary">Explore</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">About Us</h5>
-                                    <p class="card-text">Learn more about our mission</p>
-                                    <a href="{% url 'ai_features:about' %}" class="btn btn-info">Learn More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+  <div class="content-wrapper">
+    {% block content %}
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1>Welcome to AI Study Assistant</h1>
+      <p>Your intelligent companion for smarter learning</p>
+
+      {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn btn-success btn-custom">
+          <i class="bi bi-person-plus-fill me-2"></i> Register
+        </a>
+        <a href="{% url 'login' %}" class="btn btn-outline-dark btn-custom">
+          <i class="bi bi-box-arrow-in-right me-2"></i> Login
+        </a>
+      {% else %}
+        <a href="{% url 'ai_features:resources' %}" class="btn btn-primary btn-custom">
+          <i class="bi bi-lightning-fill me-2"></i> Start Studying
+        </a>
+      {% endif %}
+    </section>
+
+    <!-- About + Devs Section -->
+    <section class="about-section" id="about">
+      <div class="container">
+        <div class="bg-dark bg-opacity-75 rounded-4 p-5">
+          <!-- About Section -->
+          <h2 class="mb-4 text-white">About Us</h2>
+          <blockquote class="fst-italic fs-5 mb-5 text-light">
+            "Empowering students through AI to learn smarter, not harder."
+          </blockquote>
+
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-lightbulb-fill text-warning fs-3 me-3"></i>
+                <div>
+                  <h5 class="fw-bold text-white">Our Mission</h5>
+                  <p class="text-light">To provide intelligent, personalized study support that helps learners achieve their academic goals efficiently and confidently.</p>
                 </div>
-  <div class="content-wrapper">
-    {% block content %}
-    
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <h1>Welcome to AI Study Assistant</h1>
-      <p>Your intelligent companion for smarter learning</p>
+              </div>
+            </div>
 
-      {% if not user.is_authenticated %}
-        <a href="{% url 'register' %}" class="btn btn-success btn-custom">
-          <i class="bi bi-person-plus-fill me-2"></i> Register
-        </a>
-        <a href="{% url 'login' %}" class="btn btn-outline-dark btn-custom">
-          <i class="bi bi-box-arrow-in-right me-2"></i> Login
-        </a>
-      {% else %}
-        <a href="{% url 'resources' %}" class="btn btn-primary btn-custom">
-          <i class="bi bi-lightning-fill me-2"></i> Start Studying
-        </a>
-      {% endif %}
-    </section>
-
-    <!-- About + Devs Section -->
-<section class="about-section" id="about">
-    <div class="container">
-      <div class="bg-dark bg-opacity-75 rounded-4 p-5">
-        <!-- About Section -->
-        <h2 class="mb-4 text-white">About Us</h2>
-        <blockquote class="fst-italic fs-5 mb-5 text-light">
-          "Empowering students through AI to learn smarter, not harder."
-        </blockquote>
-  
-        <div class="row">
-          <div class="col-md-6 mb-4">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-lightbulb-fill text-warning fs-3 me-3"></i>
-              <div>
-                <h5 class="fw-bold text-white">Our Mission</h5>
-                <p class="text-light">To provide intelligent, personalized study support that helps learners achieve their academic goals efficiently and confidently.</p>
+            <div class="col-md-6 mb-4">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-stars text-info fs-3 me-3"></i>
+                <div>
+                  <h5 class="fw-bold text-white">Our Approach</h5>
+                  <p class="text-light">We blend advanced AI with beautiful design to build study tools that are useful, intuitive, and motivating.</p>
+                </div>
               </div>
             </div>
           </div>
-  
-          <div class="col-md-6 mb-4">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-stars text-info fs-3 me-3"></i>
-              <div>
-                <h5 class="fw-bold text-white">Our Approach</h5>
-                <p class="text-light">We blend advanced AI with beautiful design to build study tools that are useful, intuitive, and motivating.</p>
+
+          <div class="row mt-4 mb-5">
+            <div class="col-md-4 mb-3">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-clock-history text-primary fs-3 me-3"></i>
+                <div>
+                  <h6 class="fw-semibold text-white">Track Study Sessions</h6>
+                  <p class="text-light small">Visualize your progress, build habits, and stay accountable.</p>
+                </div>
               </div>
             </div>
+            <div class="col-md-4 mb-3">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-journal-text text-success fs-3 me-3"></i>
+                <div>
+                  <h6 class="fw-semibold text-white">Smart Learning Materials</h6>
+                  <p class="text-light small">Get personalized resource suggestions based on what you’re studying.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-3">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-graph-up-arrow text-danger fs-3 me-3"></i>
+                <div>
+                  <h6 class="fw-semibold text-white">Goal Monitoring</h6>
+                  <p class="text-light small">Set academic goals and let the assistant help you stay on track.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Devs Section -->
+          <h2 class="text-white mt-5 mb-4">Meet the Developers</h2>
+          <div class="row gy-4">
+              <div class="col-md-6 d-flex align-items-center">
+                <img src="https://github.com/alphinav.png" class="rounded-circle me-3" width="64" height="64" alt="Alphin">
+                <div>
+                  <h5 class="text-white mb-1">Alphin Abraham Varghese</h5>
+                  <a href="https://github.com/alphinav" target="_blank" class="text-light text-decoration-none">
+                    <i class="bi bi-github me-1"></i> GitHub
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6 d-flex align-items-center">
+                <img src="https://github.com/kerodev.png" class="rounded-circle me-3" width="64" height="64" alt="Kero">
+                <div>
+                  <h5 class="text-white mb-1">Kero</h5>
+                  <a href="https://github.com/kerodev" target="_blank" class="text-light text-decoration-none">
+                    <i class="bi bi-github me-1"></i> GitHub
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6 d-flex align-items-center">
+                <img src="https://github.com/viswanthdev.png" class="rounded-circle me-3" width="64" height="64" alt="Viswanth">
+                <div>
+                  <h5 class="text-white mb-1">Viswanth</h5>
+                  <a href="https://github.com/viswanthdev" target="_blank" class="text-light text-decoration-none">
+                    <i class="bi bi-github me-1"></i> GitHub
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6 d-flex align-items-center">
+                <img src="https://github.com/elidadrafaan.png" class="rounded-circle me-3" width="64" height="64" alt="Elidad Rafaan">
+                <div>
+                  <h5 class="text-white mb-1">Elidad Rafaan</h5>
+                  <a href="https://github.com/elidadrafaan" target="_blank" class="text-light text-decoration-none">
+                    <i class="bi bi-github me-1"></i> GitHub
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6 d-flex align-items-center">
+                <img src="https://github.com/elidadrafaan.png" class="rounded-circle me-3" width="64" height="64" alt="Rafaan">
+                <div>
+                  <h5 class="text-white mb-1">Rafaan</h5>
+                  <a href="https://github.com/elidadrafaan" target="_blank" class="text-light text-decoration-none">
+                    <i class="bi bi-github me-1"></i> GitHub
+                  </a>
+                </div>
+              </div>
           </div>
         </div>
-  
-        <div class="row mt-4 mb-5">
-          <div class="col-md-4 mb-3">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-clock-history text-primary fs-3 me-3"></i>
-              <div>
-                <h6 class="fw-semibold text-white">Track Study Sessions</h6>
-                <p class="text-light small">Visualize your progress, build habits, and stay accountable.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-journal-text text-success fs-3 me-3"></i>
-              <div>
-                <h6 class="fw-semibold text-white">Smart Learning Materials</h6>
-                <p class="text-light small">Get personalized resource suggestions based on what you’re studying.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-graph-up-arrow text-danger fs-3 me-3"></i>
-              <div>
-                <h6 class="fw-semibold text-white">Goal Monitoring</h6>
-                <p class="text-light small">Set academic goals and let the assistant help you stay on track.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Devs Section -->
-        <h2 class="text-white mt-5 mb-4">Meet the Developers</h2>
-        <div class="row gy-4">
-            <!-- Alphin -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/alphinav.png" class="rounded-circle me-3" width="64" height="64" alt="Alphin">
-              <div>
-                <h5 class="text-white mb-1">Alphin Abraham Varghese</h5>
-                <a href="https://github.com/alphinav" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          
-            <!-- Kero -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/kerodev.png" class="rounded-circle me-3" width="64" height="64" alt="Kero">
-              <div>
-                <h5 class="text-white mb-1">Kero</h5>
-                <a href="https://github.com/kerodev" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          
-            <!-- Viswanth -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/viswanthdev.png" class="rounded-circle me-3" width="64" height="64" alt="Viswanth">
-              <div>
-                <h5 class="text-white mb-1">Viswanth</h5>
-                <a href="https://github.com/viswanthdev" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          
-            <!-- Elidad -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/elidadrafaan.png" class="rounded-circle me-3" width="64" height="64" alt="Elidad Rafaan">
-              <div>
-                <h5 class="text-white mb-1">Elidad Rafaan</h5>
-                <a href="https://github.com/elidadrafaan" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          
-            <!-- Rafaan -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/elidadrafaan.png" class="rounded-circle me-3" width="64" height="64" alt="Rafaan">
-              <div>
-                <h5 class="text-white mb-1">Rafaan</h5>
-                <a href="https://github.com/elidadrafaan" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-            {% endblock %}
-        </div>
-    </div>
-  </section>
-  
-  
-
-  <div class="content-wrapper">
-    {% block content %}
-    
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <h1>Welcome to AI Study Assistant</h1>
-      <p>Your intelligent companion for smarter learning</p>
-
-      {% if not user.is_authenticated %}
-        <a href="{% url 'register' %}" class="btn btn-success btn-custom">
-          <i class="bi bi-person-plus-fill me-2"></i> Register
-        </a>
-        <a href="{% url 'login' %}" class="btn btn-outline-dark btn-custom">
-          <i class="bi bi-box-arrow-in-right me-2"></i> Login
-        </a>
-      {% else %}
-        <a href="{% url 'resources' %}" class="btn btn-primary btn-custom">
-          <i class="bi bi-lightning-fill me-2"></i> Start Studying
-        </a>
-      {% endif %}
-    </section>
-
-    <!-- About + Devs Section -->
-<section class="about-section" id="about">
-    <div class="container">
-      <div class="bg-dark bg-opacity-75 rounded-4 p-5">
-        <!-- About Section -->
-        <h2 class="mb-4 text-white">About Us</h2>
-        <blockquote class="fst-italic fs-5 mb-5 text-light">
-          "Empowering students through AI to learn smarter, not harder."
-        </blockquote>
-  
-        <div class="row">
-          <div class="col-md-6 mb-4">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-lightbulb-fill text-warning fs-3 me-3"></i>
-              <div>
-                <h5 class="fw-bold text-white">Our Mission</h5>
-                <p class="text-light">To provide intelligent, personalized study support that helps learners achieve their academic goals efficiently and confidently.</p>
-              </div>
-            </div>
-          </div>
-  
-          <div class="col-md-6 mb-4">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-stars text-info fs-3 me-3"></i>
-              <div>
-                <h5 class="fw-bold text-white">Our Approach</h5>
-                <p class="text-light">We blend advanced AI with beautiful design to build study tools that are useful, intuitive, and motivating.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        <div class="row mt-4 mb-5">
-          <div class="col-md-4 mb-3">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-clock-history text-primary fs-3 me-3"></i>
-              <div>
-                <h6 class="fw-semibold text-white">Track Study Sessions</h6>
-                <p class="text-light small">Visualize your progress, build habits, and stay accountable.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-journal-text text-success fs-3 me-3"></i>
-              <div>
-                <h6 class="fw-semibold text-white">Smart Learning Materials</h6>
-                <p class="text-light small">Get personalized resource suggestions based on what you’re studying.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="d-flex align-items-start">
-              <i class="bi bi-graph-up-arrow text-danger fs-3 me-3"></i>
-              <div>
-                <h6 class="fw-semibold text-white">Goal Monitoring</h6>
-                <p class="text-light small">Set academic goals and let the assistant help you stay on track.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Devs Section -->
-        <h2 class="text-white mt-5 mb-4">Meet the Developers</h2>
-        <div class="row gy-4">
-            <!-- Alphin -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/alphinav.png" class="rounded-circle me-3" width="64" height="64" alt="Alphin">
-              <div>
-                <h5 class="text-white mb-1">Alphin Abraham Varghese</h5>
-                <a href="https://github.com/alphinav" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          
-            <!-- Kero -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/kerodev.png" class="rounded-circle me-3" width="64" height="64" alt="Kero">
-              <div>
-                <h5 class="text-white mb-1">Kero</h5>
-                <a href="https://github.com/kerodev" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          
-            <!-- Viswanth -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/viswanthdev.png" class="rounded-circle me-3" width="64" height="64" alt="Viswanth">
-              <div>
-                <h5 class="text-white mb-1">Viswanth</h5>
-                <a href="https://github.com/viswanthdev" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          
-            <!-- Elidad -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/elidadrafaan.png" class="rounded-circle me-3" width="64" height="64" alt="Elidad Rafaan">
-              <div>
-                <h5 class="text-white mb-1">Elidad Rafaan</h5>
-                <a href="https://github.com/elidadrafaan" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          
-            <!-- Rafaan -->
-            <div class="col-md-6 d-flex align-items-center">
-              <img src="https://github.com/elidadrafaan.png" class="rounded-circle me-3" width="64" height="64" alt="Rafaan">
-              <div>
-                <h5 class="text-white mb-1">Rafaan</h5>
-                <a href="https://github.com/elidadrafaan" target="_blank" class="text-light text-decoration-none">
-                  <i class="bi bi-github me-1"></i> GitHub
-                </a>
-              </div>
-            </div>
-          </div>
-          
       </div>
-    </div>
-  </section>
-  
-  
+    </section>
 
     {% endblock %}
   </div>
