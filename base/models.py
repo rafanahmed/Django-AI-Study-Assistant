@@ -88,3 +88,22 @@ class AiInteraction(models.Model):
     def __str__(self):
         """String representation for the admin interface."""
         return f"{self.user.username} - {self.section} - {self.timestamp.strftime('%Y-%m-%d %H:%M')}"
+    
+
+class TimerSession(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='timer_sessions')
+    duration_seconds = models.IntegerField()  # total time spent in seconds
+    started_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.duration_seconds} seconds"
+
+class LoginActivity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='logins')
+    login_date = models.DateField()
+
+    class Meta:
+        unique_together = ('user', 'login_date')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.login_date}"

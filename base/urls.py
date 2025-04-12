@@ -29,4 +29,5 @@ urlpatterns = [
     path('study-groups/<int:group_id>/leave/', views.leave_study_group, name='leave_study_group'),
     path('ai/q/<slug:section_slug>/', views.questionnaire_view, name='questionnaire'),
     path('ai/results/', views.results_feed_view, name='results_feed'),
+    path('log-timer/', views.log_timer_session, name='log_timer'),
 ]

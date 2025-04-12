@@ -10,17 +10,16 @@
         align-items: center;
         justify-content: center;
         padding: 3rem 1rem;
-        /* No background-color here! Let body background show through */
     }
 
     .timer-container {
         max-width: 500px;
         width: 100%;
         padding: 30px;
-        background-color: rgba(255, 255, 255, 0.6); /* glassy effect */
+        background-color: rgba(255, 255, 255, 0.6);
         border-radius: 15px;
         box-shadow: 0 8px 12px rgba(0,0,0,0.2);
-        backdrop-filter: blur(5px); /* optional, makes it glass-like */
+        backdrop-filter: blur(5px);
     }
 
     .timer-display h1 {
@@ -146,7 +145,6 @@
 </section>
 {% endblock %}
 
-
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -155,31 +153,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetBtn = document.getElementById('reset-btn');
     const timerModeSwitch = document.getElementById('timer-mode-switch');
     const countdownSettings = document.getElementById('countdown-settings');
-    
+
     const hoursInput = document.getElementById('hours-input');
     const minutesInput = document.getElementById('minutes-input');
     const secondsInput = document.getElementById('seconds-input');
-    
+
     let timer;
     let isRunning = false;
     let isStopwatch = true;
-    let startTime, elapsedTime, countdownEndTime;
-    
+    let startTime, elapsedTime = 0, countdownEndTime;
+
     function formatTime(milliseconds) {
         const totalSeconds = Math.floor(milliseconds / 1000);
         const hours = Math.floor(totalSeconds / 3600);
         const minutes = Math.floor((totalSeconds % 3600) / 60);
         const seconds = totalSeconds % 60;
-        
         return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
     }
-    
+
     function pad(number) {
         return number.toString().padStart(2, '0');
     }
-    
+
     function startStopwatch() {
-        startTime = Date.now() - (elapsedTime || 0);
+        startTime = Date.now() - elapsedTime;
         timer = setInterval(() => {
             elapsedTime = Date.now() - startTime;
             timerText.textContent = formatTime(elapsedTime);
@@ -187,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
         startPauseBtn.textContent = 'Pause';
         resetBtn.disabled = false;
     }
-       
+
     function startCountdown() {
         const hours = parseInt(hoursInput.value) || 0;
         const minutes = parseInt(minutesInput.value) || 0;
@@ -199,31 +196,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const totalMilliseconds = (hours * 3600 + minutes * 60 + seconds) * 1000;
         countdownEndTime = Date.now() + totalMilliseconds;
-        
+
         timerText.textContent = formatTime(totalMilliseconds);
         timer = setInterval(() => {
             const remainingTime = countdownEndTime - Date.now();
-
             if (remainingTime <= 0) {
                 clearInterval(timer);
                 timerText.textContent = '00:00:00';
                 startPauseBtn.textContent = 'Start';
                 isRunning = false;
+
+                // ✅ Log session when countdown ends
+                logTimerSession((hours * 3600) + (minutes * 60) + seconds);
                 alert('Countdown finished!');
                 return;
             }
-
             timerText.textContent = formatTime(remainingTime);
         }, 100);
         startPauseBtn.textContent = 'Pause';
         resetBtn.disabled = false;
     }
-    
+
     function pause() {
         clearInterval(timer);
         startPauseBtn.textContent = 'Resume';
     }
-    
+
     startPauseBtn.addEventListener('click', () => {
         if (!isRunning) {
             isRunning = true;
@@ -237,41 +235,62 @@ document.addEventListener('DOMContentLoaded', function() {
             pause();
         }
     });
-    
+
     resetBtn.addEventListener('click', () => {
         clearInterval(timer);
         isRunning = false;
         startPauseBtn.textContent = 'Start';
         resetBtn.disabled = true;
-        
-        if (isStopwatch) {
-            elapsedTime = 0;
-            timerText.textContent = '00:00:00';
-        } else {
-            timerText.textContent = '00:00:00';
-            hoursInput.value = '';
-            minutesInput.value = '';
-            secondsInput.value = '';
+
+        if (isStopwatch && elapsedTime > 0) {
+            // ✅ Log stopwatch session on reset
+            logTimerSession(elapsedTime / 1000);
         }
+
+        elapsedTime = 0;
+        timerText.textContent = '00:00:00';
+        hoursInput.value = '';
+        minutesInput.value = '';
+        secondsInput.value = '';
     });
-    
+
     timerModeSwitch.addEventListener('change', () => {
         isStopwatch = !timerModeSwitch.checked;
-        
-        // Reset everything
         clearInterval(timer);
         isRunning = false;
         startPauseBtn.textContent = 'Start';
         resetBtn.disabled = true;
         timerText.textContent = '00:00:00';
-        
-        // Toggle countdown settings visibility
-        if (isStopwatch) {
-            countdownSettings.style.display = 'none';
-        } else {
-            countdownSettings.style.display = 'flex';
-        }
+        countdownSettings.style.display = isStopwatch ? 'none' : 'flex';
     });
 });
+
+// ✅ Send timer session duration to Django backend
+function logTimerSession(durationSeconds) {
+    fetch("{% url 'ai_features:log_timer' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: `duration_seconds=${Math.floor(durationSeconds)}`
+    });
+}
+
+// ✅ CSRF helper
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 </script>
 {% endblock %}

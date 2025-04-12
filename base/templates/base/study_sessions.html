@@ -1,18 +1,150 @@
 {% extends 'base/base.html' %}
 
+{% block extra_css %}
+<style>
+  .heatmap-square {
+    width: 17px;
+    height: 17px;
+    border-radius: 3px;
+  }
+
+  .heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .heatmap-legend span {
+    font-size: 0.8rem;
+  }
+
+  #month-labels {
+    display: grid;
+    grid-template-columns: repeat(54, 1fr);
+    font-size: 0.75rem;
+    margin-left: 10px;
+    margin-bottom: 6px;
+    padding-top: 10px;
+  }
+
+  #heatmap {
+    overflow-x: auto;
+    padding-right: 10px;
+  }
+
+  #month-labels {
+    overflow-x: auto;
+    padding-right: 10px;
+  }
+
+  /* Remove white from cards */
+  .card {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: none;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h1 class="text-center mb-4">Study Sessions</h1>
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <p>This is where you'll manage and track your study sessions.</p>
-            <p>Features coming soon:</p>
-            <ul>
-                <li>Create new study sessions</li>
-                <li>Track study time</li>
-                <li>Set goals and milestones</li>
-            </ul>
+<div class="container py-4">
+    <div class="study-wrapper" style="background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(6px); border-radius: 15px; padding: 2rem;">
+
+  <div class="row">
+    <!-- Calendar -->
+    <div class="col-lg-8 mb-4">
+      <h4 class="text-center">Login Streak</h4>
+      <div id="month-labels"></div>
+      <div id="heatmap" class="d-flex flex-wrap"></div>
+      <div class="mt-2 heatmap-legend">
+        <span class="heatmap-square" style="background-color: #eeeeee;"></span><span>No login</span>
+        <span class="heatmap-square" style="background-color: #a3d977;"></span><span>Login</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="col-lg-3 ms-auto">
+      <div class="card mb-3">
+        <div class="card-body text-center p-2">
+          <h6 class="card-title mb-1" style="font-size: 0.9rem;">Hours Spent Studying</h6>
+          <p class="h5 mb-0">{{ hours_spent }}</p>
         </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-body text-center p-2">
+          <h6 class="card-title mb-1" style="font-size: 0.9rem;">Number of Timer Sessions</h6>
+          <p class="h5 mb-0">{{ timer_uses }}</p>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-body text-center p-2">
+          <h6 class="card-title mb-1" style="font-size: 0.9rem;">Flashcards Created</h6>
+          <p class="h5 mb-0">{{ flashcard_count }}</p>
+        </div>
+      </div>
+    </div>
+    </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const loginDates = new Set(JSON.parse('{{ login_dates|safe|escapejs }}'));
+
+const today = new Date();
+const yearStart = new Date();
+yearStart.setDate(today.getDate() - 364); // 1 year ago
+
+const container = document.getElementById('heatmap');
+container.style.display = 'grid';
+container.style.gridTemplateColumns = 'repeat(54, 19px)';
+container.style.gridTemplateRows = 'repeat(7, 19px)';
+container.style.gridGap = '2px';
+
+const monthMarkers = {};
+
+for (let d = new Date(yearStart); d <= today; d.setDate(d.getDate() + 1)) {
+  const isoDate = d.toISOString().split('T')[0];
+  const square = document.createElement('div');
+  square.className = 'heatmap-square';
+  square.title = isoDate;
+  square.style.backgroundColor = loginDates.has(isoDate) ? '#a3d977' : '#eeeeee';
+
+  const week = Math.floor((d - yearStart) / (7 * 24 * 60 * 60 * 1000));
+  let day = d.getDay();
+  day = day === 0 ? 6 : day - 1;
+
+  square.style.gridColumn = `${week + 1}`;
+  square.style.gridRow = `${day + 1}`;
+  container.appendChild(square);
+
+  const monthLabel = d.toLocaleDateString('en-US', { month: 'short' });
+  if (!Object.values(monthMarkers).includes(monthLabel)) {
+    monthMarkers[week] = monthLabel;
+  }
+}
+
+const monthContainer = document.getElementById('month-labels');
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+// Place 12 month labels at evenly spaced intervals across 54 columns
+for (let i = 0; i < 54; i++) {
+  const label = document.createElement('div');
+
+  if (i % 5 === 0) {
+    // Show approx one label every ~4.5 weeks
+    const monthIndex = Math.floor((i / 54) * 12);
+    label.textContent = months[monthIndex];
+  } else {
+    label.textContent = '';
+  }
+
+  label.style.textAlign = 'center';
+  monthContainer.appendChild(label);
+}
+
+
+</script>
 {% endblock %}

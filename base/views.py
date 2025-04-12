@@ -8,6 +8,14 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from .models import TimerSession
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.timezone import now
+from .models import TimerSession
+from django.views.decorators.http import require_POST
+from django.utils.timezone import now
+from .models import LoginActivity
+
 
 from .models import FlashcardDeck, Flashcard, Review, StudyGroup, AiInteraction
 from .forms import (
@@ -46,7 +54,12 @@ def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            login(request, form.get_user())
+            user = form.get_user()
+            login(request, user)
+
+            # Log today's login
+            LoginActivity.objects.get_or_create(user=user, login_date=now().date())
+
             return redirect('ai_features:home')
         else:
             messages.error(request, 'Invalid username or password.')
@@ -100,11 +113,14 @@ def create_deck_view(request):
     if request.method == 'POST':
         form = FlashcardDeckForm(request.POST)
         if form.is_valid():
-            form.save()
+            deck = form.save(commit=False)
+            deck.user = request.user  # 🔥 THIS LINE IS NEEDED
+            deck.save()
             return redirect('ai_features:flashcards')
     else:
         form = FlashcardDeckForm()
     return render(request, 'base/create_deck.html', {'form': form})
+
 
 
 @login_required
@@ -115,11 +131,16 @@ def deck_detail_view(request, deck_id):
 
     if request.method == 'POST' and form.is_valid():
         flashcard = form.save(commit=False)
-        flashcard.deck = deck
+        flashcard.deck = deck  # 🔥 this line is essential!
         flashcard.save()
         return redirect('ai_features:deck_detail', deck_id=deck.id)
 
-    return render(request, 'base/deck_detail.html', {'deck': deck, 'cards': cards, 'form': form})
+    return render(request, 'base/deck_detail.html', {
+        'deck': deck,
+        'cards': cards,
+        'form': form
+    })
+
 
 
 @login_required
@@ -218,12 +239,25 @@ def delete_review(request, review_id):
     return redirect('ai_features:review_page')
 
 
+from .models import LoginActivity
+
 @login_required
-def study_groups_view(request):
-    return render(request, 'base/study_groups.html', {
-        'user_groups': request.user.study_groups.all(),
-        'all_groups': StudyGroup.objects.all()
+def study_sessions_view(request):
+    total_seconds = sum(session.duration_seconds for session in request.user.timer_sessions.all())
+    hours_spent = total_seconds // 3600
+    timer_uses = request.user.timer_sessions.count()
+    flashcard_count = Flashcard.objects.filter(deck__user=request.user).count()
+
+    logins = LoginActivity.objects.filter(user=request.user)
+    login_dates = [login.login_date.isoformat() for login in logins]
+
+    return render(request, 'base/study_sessions.html', {
+        'hours_spent': hours_spent,
+        'timer_uses': timer_uses,
+        'flashcard_count': flashcard_count,
+        'login_dates': login_dates,
     })
+
 
 
 @login_required
@@ -353,3 +387,25 @@ def questionnaire_view(request, section_slug):
 def results_feed_view(request):
     interactions = AiInteraction.objects.filter(user=request.user).order_by('-timestamp')
     return render(request, 'base/results_feed.html', {'interactions': interactions})
+
+
+@login_required
+def study_groups_view(request):
+    return render(request, 'base/study_groups.html', {
+        'user_groups': request.user.study_groups.all(),
+        'all_groups': StudyGroup.objects.all()
+    })
+
+
+@csrf_exempt
+@require_POST
+@login_required
+def log_timer_session(request):
+    try:
+        seconds = int(request.POST.get("duration_seconds", 0))
+        if seconds > 0:
+            TimerSession.objects.create(user=request.user, duration_seconds=seconds)
+            return JsonResponse({"status": "success"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)})
+    return JsonResponse({"status": "invalid"})
