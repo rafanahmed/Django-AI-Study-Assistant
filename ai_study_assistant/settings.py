@@ -146,6 +146,6 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Authentication URLs
-LOGIN_URL = 'login'  # The name of your login URL pattern
-LOGIN_REDIRECT_URL = 'home'  # Where to redirect after login
-LOGOUT_REDIRECT_URL = 'home'  # Where to redirect after logout
+LOGIN_URL = 'ai_features:login'  # The name of your login URL pattern
+LOGIN_REDIRECT_URL = 'ai_features:home'  # Where to redirect after login
+LOGOUT_REDIRECT_URL = 'ai_features:home'  # Where to redirect after logout
