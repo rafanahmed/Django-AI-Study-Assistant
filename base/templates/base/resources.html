@@ -40,9 +40,22 @@
                 </div>
             </div>
 
-            {# Optional: Link to general AI History #}
+            {# Card for Mood Assessment Link #}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Mood Assessment Reflection</h5>
+                    <p class="card-text">Reflect on how you're feeling about your studies or workload and get a supportive comment.</p>
+                     {# Link to the questionnaire view with the correct section_slug and namespace #}
+                    <a href="{% url 'ai_features:questionnaire' section_slug='mood-assessment' %}" class="btn btn-primary">Start Mood Assessment</a>
+                </div>
+            </div>
+
+
+            {# Link to general AI History #}
              <div class="text-center mt-4">
-                 <a href="{% url 'ai_features:results_feed' %}" class="text-secondary">View all my AI interaction history</a>
+                 {# *** FIX HERE: Changed class from 'text-secondary' to 'btn btn-secondary' *** #}
+                 <a href="{% url 'ai_features:results_feed' %}" class="btn btn-secondary btn-sm">View all my AI interaction history</a>
+                 {# Added btn-sm for slightly smaller size #}
              </div>
 
         </div>

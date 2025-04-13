@@ -28,17 +28,20 @@ from .forms import (
     QuestionnaireForm,
 )
 
-# --- Gemini API Configuration ---
+# --- Gemini API Configuration & Check ---
+gemini_configured_successfully = False
 try:
-    model_name = "gemini-2.0-flash"
+    model_name = "gemini-1.5-flash-latest"
     model = genai.GenerativeModel(model_name)
-    print(f"Successfully initialized Gemini model in views.py: {model_name}")
+    print(f"DEBUG: Successfully initialized Gemini model: {model_name}")
+    gemini_configured_successfully = True
 except Exception as e:
-    print(f"ERROR: Failed to initialize Gemini model in views.py: {e}")
+    print(f"ERROR: Failed to initialize Gemini model in views.py (check API key configuration and value). Error: {e}")
     model = None
 
-
+# --- Helper Function for Gemini Prompt ---
 def create_gemini_prompt(question, answer, desired_response_type):
+    """Formats the prompt for the Gemini API."""
     return f"""Context: A user is interacting with an educational web application.
 
 Question asked to the user:
@@ -47,7 +50,9 @@ Question asked to the user:
 User's Answer:
 {answer}
 
-Task: Based *only* on the user's answer provided above in response to the question, provide {desired_response_type}. Keep the response concise and directly related to the answer."""
+Task: Based *only* on the user's answer provided above in response to the question, provide {desired_response_type}. 
+Please provide a helpful and reasonably detailed response suitable for the context. 
+Format the entire response as plain text only, without using any Markdown formatting (no asterisks, underscores, backticks, lists, etc.)."""
 
 
 def login_view(request):
