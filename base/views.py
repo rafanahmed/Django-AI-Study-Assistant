@@ -88,7 +88,7 @@ def register(request):
             return redirect('ai_features:login')
     else:
         form = RegisterForm()
-    return render(request, 'base/login.html', {'form': form})
+    return render(request, 'base/register.html', {'form': form})
 
 
 def user_logout(request):

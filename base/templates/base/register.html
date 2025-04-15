@@ -1,12 +1,27 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+<style>
+  .layout__box {
+    margin-top: 2rem; 
+  }
+  
+  .btn--main {
+    margin-bottom: 1.0rem; 
+  }
+  .auth__tagline {
+    margin-bottom: 1.0rem; 
+    display: block; 
+  }
+  .auth__action .btn--link {
+    font-weight: bold;  
+  }
+</style>
 <main class="auth layout">
   <div class="container">
     <div class="layout__box">
       <div class="layout__boxHeader">
         <div class="layout__boxTitle">
-          <h3>Sign Up</h3>
         </div>
       </div>
       <div class="layout__body">
@@ -67,7 +82,7 @@
 
         <div class="auth__action">
           <p>Already have an account?</p>
-          <a href="{% url 'ai_features:login' %}" class="btn btn--link">Login Here</a>
+          <a href="{% url 'ai_features:login' %}" class="btn btn--link">Click here to login </a>
         </div>
       </div>
     </div>

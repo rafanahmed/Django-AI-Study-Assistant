@@ -1,11 +1,30 @@
 {% extends 'base/base.html' %}
 
 {% block content %}
+<style>
+  .auth__action .btn--link {
+    font-weight: bold;  
+  }
+  .layout__box {
+    margin-top: 2rem; 
+  }
+  
+  .layout__boxHeader {
+    padding-top: 1.5rem; 
+  }
+  .btn--main {
+    margin-bottom: 1.5rem; 
+  }
+  .auth__tagline {
+    margin-bottom: 1.5rem; 
+    display: block; 
+  }
+
+</style>
 
 <main class="auth layout">
 
   {% if page == 'login' %}
-
   <div class="container">
     <div class="layout__box">
       <div class="layout__boxHeader">
@@ -67,7 +86,6 @@
     <div class="layout__box">
       <div class="layout__boxHeader">
         <div class="layout__boxTitle">
-          <h3>Log In</h3>
         </div>
       </div>
       <div class="layout__body">
