@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import FlashcardDeck, Flashcard, Review
 from .models import StudyGroup, GroupMessage
+from .models import Exam, ExamQuestion, ExamAnswer
+
+
 class RegisterForm(UserCreationForm):
     # fields we want to include and customize in our form
     first_name = forms.CharField(max_length=100,
@@ -132,3 +135,48 @@ class QuestionnaireForm(forms.Form):
     # Hidden field to carry the section identifier (e.g., 'online-tutorials').
     # Value set in the view/template.
     section = forms.CharField(widget=forms.HiddenInput())
+
+class ExamForm(forms.ModelForm):
+    class Meta:
+        model = Exam
+        fields = ['title', 'description', 'duration_minutes']  # Changed from 'name' to 'title'
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'duration_minutes': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+
+class ExamQuestionForm(forms.ModelForm):
+    class Meta:
+        model = ExamQuestion
+        fields = ['text', 'order']
+        widgets = {
+            'text': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Enter the question text'
+            }),
+            'order': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Question number (1, 2, 3...)'
+            }),
+        }
+
+class ExamAnswerForm(forms.ModelForm):
+    class Meta:
+        model = ExamAnswer
+        fields = ['text', 'is_correct']
+        widgets = {
+            'text': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter answer text'
+            }),
+            'is_correct': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
+        }
+        labels = {
+            'is_correct': 'Correct answer'
+        }

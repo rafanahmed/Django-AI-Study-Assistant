@@ -107,3 +107,26 @@ class LoginActivity(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.login_date}"
+
+class Exam(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    duration_minutes = models.IntegerField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.title
+
+class ExamQuestion(models.Model):
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, related_name='questions')
+    text = models.TextField()
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+class ExamAnswer(models.Model):
+    question = models.ForeignKey(ExamQuestion, on_delete=models.CASCADE, related_name='answers')
+    text = models.TextField()
+    is_correct = models.BooleanField(default=False)

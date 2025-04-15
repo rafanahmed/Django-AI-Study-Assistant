@@ -30,4 +30,18 @@ urlpatterns = [
     path('ai/q/<slug:section_slug>/', views.questionnaire_view, name='questionnaire'),
     path('ai/results/', views.results_feed_view, name='results_feed'),
     path('log-timer/', views.log_timer_session, name='log_timer'),
+    path('exams/', views.exam_list, name='exam_list'),
+    path('exams/create/', views.create_exam, name='create_exam'),
+    path('exams/<int:exam_id>/', views.exam_detail, name='exam_detail'),
+    path('exams/<int:exam_id>/edit/', views.edit_exam, name='exam_edit'),
+    path('exams/<int:exam_id>/add-question/', views.add_question, name='add_question'),
+    path('questions/<int:question_id>/add-answer/', views.add_answer, name='add_answer'),
+    path('answers/delete/<int:answer_id>/', views.delete_answer, name='delete_answer'),
+    path('questions/delete/<int:question_id>/', views.delete_question, name='delete_question'),
+    path('answers/delete/<int:answer_id>/', views.delete_answer, name='delete_answer'),
+    path('exams/<int:exam_id>/delete/', views.delete_exam, name='delete_exam'),
+    path('exams/<int:exam_id>/take/', views.take_exam, name='take_exam'),
+    path('exams/<int:exam_id>/result/', views.exam_result, name='exam_result'),
+    path('exams/<int:exam_id>/submit/', views.submit_exam, name='submit_exam'),
+
 ]

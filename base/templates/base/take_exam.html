@@ -1,0 +1,81 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2>{{ exam.title }}</h2>
+            <div class="timer-display bg-dark text-white p-2 rounded">
+                Time Remaining: <span id="timer">00:00</span>
+            </div>
+        </div>
+        
+        <div class="card-body">
+            <p class="card-text">{{ exam.description }}</p>
+            
+            <form id="examForm" method="POST" action="{% url 'ai_features:submit_exam' exam.id %}">
+                {% csrf_token %}
+                
+                {% for question in questions %}
+                <div class="question-card mb-4 p-3 border rounded">
+                    <h5>Question {{ forloop.counter }}</h5>
+                    <p>{{ question.text }}</p>
+                    
+                    <div class="answers">
+                        {% for answer in question.answers.all %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" 
+                                   name="question_{{ question.id }}" 
+                                   id="answer_{{ answer.id }}" 
+                                   value="{{ answer.id }}">
+                            <label class="form-check-label" for="answer_{{ answer.id }}">
+                                {{ answer.text }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn btn-primary">Submit Exam</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Timer functionality
+const durationMs = {{ duration_ms }};
+let timeLeft = durationMs;
+
+function updateTimer() {
+    const minutes = Math.floor(timeLeft / (1000 * 60));
+    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    
+    document.getElementById('timer').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    
+    if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        document.getElementById('examForm').submit();
+    } else {
+        timeLeft -= 1000;
+    }
+}
+
+// Update timer every second
+const timerInterval = setInterval(updateTimer, 1000);
+// Initial call
+updateTimer();
+</script>
+
+<style>
+.timer-display {
+    font-family: monospace;
+    font-size: 1.2rem;
+}
+.question-card {
+    background-color: #f8f9fa;
+}
+</style>
+{% endblock %}

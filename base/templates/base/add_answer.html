@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>Add Answers to Question</h2>
+            <p class="mb-0"><strong>Exam:</strong> {{ exam.title }}</p>
+            <p class="mb-0"><strong>Question:</strong> {{ question.text }}</p>
+        </div>
+        
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.text.label_tag }}
+                    {{ form.text }}
+                </div>
+                <div class="mb-3 form-check">
+                    {{ form.is_correct }}
+                    <label class="form-check-label" for="{{ form.is_correct.id_for_label }}">
+                        Mark as correct answer
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Answer</button>
+                <a href="{% url 'ai_features:exam_detail' exam.id %}" class="btn btn-secondary">Done</a>
+            </form>
+            
+            <hr>
+            
+            <h4>Current Answers</h4>
+            {% if answers %}
+                <div class="list-group">
+                    {% for answer in answers %}
+                    <div class="list-group-item {% if answer.is_correct %}list-group-item-success{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            {{ answer.text }}
+                            <div>
+                                {% if answer.is_correct %}
+                                <span class="badge bg-success">Correct</span>
+                                {% endif %}
+                                <a href="{% url 'ai_features:delete_answer' answer.id %}" 
+                                   class="btn btn-sm btn-danger ms-2"
+                                   onclick="return confirm('Delete this answer?');">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No answers added yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

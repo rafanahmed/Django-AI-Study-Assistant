@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>Exam Results: {{ exam.title }}</h2>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info">
+                <h4 class="alert-heading">
+                    Score: {{ score }}/{{ total_questions }} ({{ percentage|floatformat:1 }}%)
+                </h4>
+            </div>
+            
+            <h3>Question Review</h3>
+            
+            {% for result in results %}
+            <div class="card mb-3 {% if result.is_correct %}border-success{% else %}border-danger{% endif %}">
+                <div class="card-header {% if result.is_correct %}bg-success text-white{% else %}bg-danger text-white{% endif %}">
+                    Question {{ forloop.counter }}: {% if result.is_correct %}✔ Correct{% else %}✖ Incorrect{% endif %}
+                </div>
+                <div class="card-body">
+                    <h5>{{ result.question.text }}</h5>
+                    
+                    <div class="mt-3">
+                        <div class="mb-2">
+                            <strong>Your answer:</strong>
+                            <span class="{% if result.is_correct %}text-success{% else %}text-danger{% endif %}">
+                                {{ result.selected_answer.text|default:"No answer selected" }}
+                            </span>
+                        </div>
+                        
+                        {% if not result.is_correct %}
+                        <div class="mb-2">
+                            <strong>Correct answer:</strong>
+                            <span class="text-success">
+                                {{ result.correct_answer.text }}
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <a href="{% url 'ai_features:exam_detail' exam.id %}" class="btn btn-primary">
+                Back to Exam Details
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

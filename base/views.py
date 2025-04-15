@@ -15,6 +15,12 @@ from .models import TimerSession
 from django.views.decorators.http import require_POST
 from django.utils.timezone import now
 from .models import LoginActivity
+from .models import Exam, ExamQuestion  
+from .forms import ExamForm, ExamQuestionForm
+from .forms import ExamAnswerForm
+from .models import ExamAnswer
+
+
 
 
 from .models import FlashcardDeck, Flashcard, Review, StudyGroup, AiInteraction
@@ -414,3 +420,247 @@ def log_timer_session(request):
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)})
     return JsonResponse({"status": "invalid"})
+
+
+@login_required
+def exam_list(request):
+    exams = Exam.objects.all()
+    return render(request, 'base/exam_list.html', {'exams': exams})
+
+@login_required
+def exam_detail(request, exam_id):
+    exam = get_object_or_404(Exam, id=exam_id)
+    return render(request, 'base/exam_detail.html', {'exam': exam})
+
+@login_required
+def create_exam(request):
+    if request.method == 'POST':
+        form = ExamForm(request.POST)
+        if form.is_valid():
+            exam = form.save(commit=False)
+            exam.created_by = request.user
+            exam.save()
+            return redirect('ai_features:exam_list')  # Updated to use ai_features
+    else:
+        form = ExamForm()
+    return render(request, 'base/create_exam.html', {'form': form})
+
+@login_required
+def edit_exam(request, exam_id):
+    exam = get_object_or_404(Exam, id=exam_id)
+    
+    # Check if the current user is the exam creator
+    if request.user != exam.created_by:
+        messages.error(request, "You don't have permission to edit this exam.")
+        return redirect('ai_features:exam_detail', exam_id=exam.id)
+    
+    if request.method == 'POST':
+        form = ExamForm(request.POST, instance=exam)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Exam updated successfully!")
+            return redirect('ai_features:exam_detail', exam_id=exam.id)
+    else:
+        form = ExamForm(instance=exam)
+    
+    return render(request, 'base/edit_exam.html', {
+        'form': form,
+        'exam': exam
+    })
+
+    # Add to views.py
+@login_required
+def add_question(request, exam_id):
+    exam = get_object_or_404(Exam, id=exam_id)
+    
+    if request.user != exam.created_by:
+        messages.error(request, "You don't have permission to add questions to this exam.")
+        return redirect('ai_features:exam_detail', exam_id=exam.id)
+    
+    if request.method == 'POST':
+        form = ExamQuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.exam = exam  # Connect question to exam
+            question.save()
+            messages.success(request, "Question added successfully!")
+            return redirect('ai_features:add_question', exam_id=exam.id)  # Stay on same page to add more
+    else:
+        form = ExamQuestionForm()
+    
+    # Get all existing questions for this exam
+    existing_questions = exam.questions.all().order_by('order')
+    
+    return render(request, 'base/add_question.html', {
+        'form': form,
+        'exam': exam,
+        'questions': existing_questions
+    })
+
+@login_required
+def add_answer(request, question_id):
+    question = get_object_or_404(ExamQuestion, id=question_id)
+    exam = question.exam
+    
+    if request.user != exam.created_by:
+        messages.error(request, "You don't have permission to add answers to this question.")
+        return redirect('ai_features:exam_detail', exam_id=exam.id)
+    
+    if request.method == 'POST':
+        form = ExamAnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save(commit=False)
+            answer.question = question
+            answer.save()
+            messages.success(request, "Answer added successfully!")
+            return redirect('ai_features:add_answer', question_id=question.id)
+    else:
+        form = ExamAnswerForm()
+    
+    existing_answers = question.answers.all()
+    
+    return render(request, 'base/add_answer.html', {
+        'form': form,
+        'question': question,
+        'exam': exam,
+        'answers': existing_answers
+    })
+
+@login_required
+def delete_question(request, question_id):
+    question = get_object_or_404(ExamQuestion, id=question_id)
+    exam_id = question.exam.id
+    
+    if request.user != question.exam.created_by:
+        messages.error(request, "You don't have permission to delete this question.")
+    else:
+        question.delete()
+        messages.success(request, "Question deleted successfully!")
+    
+    return redirect('ai_features:exam_detail', exam_id=exam_id)
+
+@login_required
+def delete_answer(request, answer_id):
+    answer = get_object_or_404(ExamAnswer, id=answer_id)
+    question = answer.question
+    exam = question.exam
+    
+    if request.user != exam.created_by:
+        messages.error(request, "You don't have permission to delete this answer.")
+    else:
+        answer.delete()
+        messages.success(request, "Answer deleted successfully!")
+    
+    return redirect('ai_features:add_answer', question_id=question.id)
+
+
+@login_required
+def delete_exam(request, exam_id):
+    exam = get_object_or_404(Exam, id=exam_id)
+    
+    # Check if the current user is the exam creator
+    if request.user != exam.created_by:
+        messages.error(request, "You don't have permission to delete this exam.")
+        return redirect('ai_features:exam_list')
+    
+    if request.method == 'POST':
+        exam.delete()
+        messages.success(request, "Exam deleted successfully!")
+        return redirect('ai_features:exam_list')
+    
+    # If GET request, show confirmation page
+    return render(request, 'base/delete_exam.html', {'exam': exam})
+
+
+@login_required
+def take_exam(request, exam_id):
+    exam = get_object_or_404(Exam, id=exam_id)
+    questions = exam.questions.all().order_by('order')
+    
+    # Convert minutes to milliseconds for JavaScript timer
+    duration_ms = exam.duration_minutes * 60 * 1000
+    
+    if request.method == 'POST':
+        # Process submitted answers here
+        return redirect('ai_features:exam_result', exam_id=exam.id)
+    
+    return render(request, 'base/take_exam.html', {
+        'exam': exam,
+        'questions': questions,
+        'duration_ms': duration_ms,
+    })
+
+
+@login_required
+def submit_exam(request, exam_id):
+    exam = get_object_or_404(Exam, id=exam_id)
+    questions = exam.questions.all()
+    score = 0
+    total_questions = questions.count()
+    results = []
+    
+    if request.method == 'POST':
+        for question in questions:
+            selected_answer_id = request.POST.get(f'question_{question.id}')
+            correct_answer = question.answers.filter(is_correct=True).first()
+            
+            is_correct = False
+            if selected_answer_id and correct_answer:
+                is_correct = (int(selected_answer_id) == correct_answer.id)
+            
+            results.append({
+                'question': question,
+                'selected_answer': question.answers.filter(id=selected_answer_id).first() if selected_answer_id else None,
+                'correct_answer': correct_answer,
+                'is_correct': is_correct
+            })
+            
+            if is_correct:
+                score += 1
+        
+        percentage = (score / total_questions) * 100 if total_questions > 0 else 0
+        
+        return render(request, 'base/exam_results.html', {
+            'exam': exam,
+            'results': results,
+            'score': score,
+            'total_questions': total_questions,
+            'percentage': percentage
+        })
+    
+    return redirect('ai_features:take_exam', exam_id=exam.id)
+
+
+@login_required
+def exam_result(request, exam_id):
+    exam = get_object_or_404(Exam, id=exam_id)
+    
+    # Retrieve results from session
+    results_data = request.session.get('exam_results', {})
+    
+    # Verify we have results for this exam
+    if not results_data or results_data.get('exam_id') != exam.id:
+        messages.error(request, "No exam results found. Please take the exam first.")
+        return redirect('ai_features:take_exam', exam_id=exam.id)
+    
+    # Reconstruct the full results with question and answer objects
+    results = []
+    for r in results_data['results']:
+        question = get_object_or_404(ExamQuestion, id=r['question_id'])
+        selected_answer = question.answers.filter(id=r['selected_answer_id']).first() if r['selected_answer_id'] else None
+        correct_answer = question.answers.filter(is_correct=True).first()
+        
+        results.append({
+            'question': question,
+            'selected_answer': selected_answer,
+            'correct_answer': correct_answer,
+            'is_correct': r['is_correct']
+        })
+    
+    return render(request, 'base/exam_results.html', {
+        'exam': exam,
+        'results': results,
+        'score': results_data['score'],
+        'total_questions': results_data['total_questions'],
+        'percentage': results_data['percentage']
+    })

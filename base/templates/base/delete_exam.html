@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h2>Delete Exam</h2>
+        </div>
+        <div class="card-body">
+            <p>Are you sure you want to delete "{{ exam.title }}"?</p>
+            <p class="text-danger"><strong>This will permanently delete the exam and all its questions.</strong></p>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Confirm Delete
+                </button>
+                <a href="{% url 'ai_features:exam_detail' exam.id %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
