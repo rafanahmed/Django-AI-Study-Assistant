@@ -2,6 +2,29 @@
 
 {% block extra_css %}
 <style>
+  .checkmark {
+    color: rgb(230, 6, 6);
+    cursor: pointer;
+    margin-right: 10px;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid black;
+    text-align: center;
+    line-height: 12px;
+    font-size: 12px;
+    background-color: black;
+    color: gray;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 10px;
+  }
+
+  .checkmark.clicked {
+    background-color: black;
+    color: rgb(233, 12, 12);
+  }
+
   .heatmap-square {
     width: 17px;
     height: 17px;
@@ -37,114 +60,284 @@
     padding-right: 10px;
   }
 
-  /* Remove white from cards */
   .card {
     background-color: rgba(255, 255, 255, 0.7) !important;
     backdrop-filter: blur(3px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     border: none;
   }
+
+  .graph-container {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  .graph-text {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .arrow {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 90px;
+    transform: scaleX(4);
+    transition: transform 0.3s ease-in-out;
+    margin-top: 0px;
+  }
+
+  .arrow.up {
+    transform: rotate(180deg);
+  }
+
+  .arrow.down {
+    transform: rotate(0deg);
+  }
+
+  .arrow.neutral {
+    transform: rotate(0deg);
+  }
+
+  canvas {
+    width: 100% !important;
+    height: 100px !important;
+  }
+
+  .stat-info {
+    display: none;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 20px;
+  }
+
+  li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 8px;
+  }
+
+  li .checkmark {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container py-4">
-    <div class="study-wrapper" style="background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(6px); border-radius: 15px; padding: 2rem;">
-
   <div class="row">
-    <!-- Calendar -->
-    <div class="col-lg-8 mb-4">
-      <h4 class="text-center">Login Streak</h4>
-      <div id="month-labels"></div>
-      <div id="heatmap" class="d-flex flex-wrap"></div>
-      <div class="mt-2 heatmap-legend">
-        <span class="heatmap-square" style="background-color: #eeeeee;"></span><span>No login</span>
-        <span class="heatmap-square" style="background-color: #a3d977;"></span><span>Login</span>
+    <div class="col-lg-12 mb-4">
+      <div class="graph-container">
+        <h4 class="text-center">Weekly Report Available</h4>
+        <p class="text-center mb-5 graph-text">
+          {% if trend == 'up' %}
+            Your study time was up <strong>{{ percent_change }}%</strong> last week.
+          {% elif trend == 'down' %}
+            Your study time was down <strong>{{ percent_change }}%</strong> last week.
+          {% else %}
+            Your study time was <strong>0%</strong> last week.
+          {% endif %}
+        </p>
+
+        <div class="arrow">
+          {% if trend == 'up' %}
+            <span class="arrow up">&#8595;</span>
+          {% elif trend == 'down' %}
+            <span class="arrow down">&#8595;</span>
+          {% else %}
+            <span class="arrow neutral">&#8594;</span>
+          {% endif %}
+        </div>
+
+        <div class="graph-card mt-5">
+          {% if trend == 'up' %}
+            <canvas id="upTrendChart" width="400" height="200"></canvas>
+          {% elif trend == 'down' %}
+            <canvas id="downTrendChart" width="400" height="200"></canvas>
+          {% else %}
+            <canvas id="symmetricTrendChart" width="400" height="200"></canvas>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5 text-center">
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body p-3">
+          <h6 class="card-title mb-2" style="font-size: 1rem;">Study Progress</h6>
+          <ul>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('study-time-info')">✔️</span>
+              Total Study Time {{ total_study_time }}
+              <div id="study-time-info" class="stat-info">Additional details or breakdown of total study time...</div>
+            </li>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('flashcards-info')">✔️</span>
+  Flashcards Created: {{ flashcards_created }}
+  <div id="flashcards-info" class="stat-info" style="display: none;">Total: {{ flashcards_created }}</div>
+
+            </li>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('practice-exams-info')">✔️</span>
+              Practice Exams Created {{ practice_exams_created }}
+              <div id="practice-exams-info" class="stat-info">Info on practice exams...</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+
+    <div class="col-md-4">
+      <div class="card mb-3">
+        <div class="card-body p-3">
+          <h6 class="card-title mb-2" style="font-size: 1rem;">Study Group Activity</h6>
+          <ul>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('study-groups-info')">✔️</span>
+              Number of Study Groups Created {{ study_groups_created }}
+              <div id="study-groups-info" class="stat-info">Additional info about study groups...</div>
+            </li>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('messages-info')">✔️</span>
+              Number of Messages Sent {{ messages_sent }}
+              <div id="messages-info" class="stat-info">Details about messages sent...</div>
+            </li>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('time-in-groups-info')">✔️</span>
+              Time Spent in Study Groups {{ time_spent_in_groups }}
+              <div id="time-in-groups-info" class="stat-info">Info about time in study groups...</div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="col-lg-3 ms-auto">
+    <div class="col-md-4">
       <div class="card mb-3">
-        <div class="card-body text-center p-2">
-          <h6 class="card-title mb-1" style="font-size: 0.9rem;">Hours Spent Studying</h6>
-          <p class="h5 mb-0">{{ hours_spent }}</p>
-        </div>
-      </div>
-      <div class="card mb-3">
-        <div class="card-body text-center p-2">
-          <h6 class="card-title mb-1" style="font-size: 0.9rem;">Number of Timer Sessions</h6>
-          <p class="h5 mb-0">{{ timer_uses }}</p>
-        </div>
-      </div>
-      <div class="card mb-3">
-        <div class="card-body text-center p-2">
-          <h6 class="card-title mb-1" style="font-size: 0.9rem;">Flashcards Created</h6>
-          <p class="h5 mb-0">{{ flashcard_count }}</p>
+        <div class="card-body p-3">
+          <h6 class="card-title mb-2" style="font-size: 1rem;">AI Activity</h6>
+          <ul>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('tutorials-info')">✔️</span>
+              Number of Online Tutorials Feedback {{ tutorials_feedback }}
+              <div id="tutorials-info" class="stat-info">Info about tutorial feedback...</div>
+            </li>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('guide-clarifications-info')">✔️</span>
+              Number of Study Guide Clarifications {{ guide_clarifications }}
+              <div id="guide-clarifications-info" class="stat-info">Detailed info on clarifications...</div>
+            </li>
+            <li>
+              <span class="checkmark" onclick="toggleStatInfo('mood-assessment-info')">✔️</span>
+              Mood Assessment {{ mood_assessment }}
+              <div id="mood-assessment-info" class="stat-info">Info about mood assessments...</div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-    </div>
-    </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-const loginDates = new Set(JSON.parse('{{ login_dates|safe|escapejs }}'));
-
-const today = new Date();
-const yearStart = new Date();
-yearStart.setDate(today.getDate() - 364); // 1 year ago
-
-const container = document.getElementById('heatmap');
-container.style.display = 'grid';
-container.style.gridTemplateColumns = 'repeat(54, 19px)';
-container.style.gridTemplateRows = 'repeat(7, 19px)';
-container.style.gridGap = '2px';
-
-const monthMarkers = {};
-
-for (let d = new Date(yearStart); d <= today; d.setDate(d.getDate() + 1)) {
-  const isoDate = d.toISOString().split('T')[0];
-  const square = document.createElement('div');
-  square.className = 'heatmap-square';
-  square.title = isoDate;
-  square.style.backgroundColor = loginDates.has(isoDate) ? '#a3d977' : '#eeeeee';
-
-  const week = Math.floor((d - yearStart) / (7 * 24 * 60 * 60 * 1000));
-  let day = d.getDay();
-  day = day === 0 ? 6 : day - 1;
-
-  square.style.gridColumn = `${week + 1}`;
-  square.style.gridRow = `${day + 1}`;
-  container.appendChild(square);
-
-  const monthLabel = d.toLocaleDateString('en-US', { month: 'short' });
-  if (!Object.values(monthMarkers).includes(monthLabel)) {
-    monthMarkers[week] = monthLabel;
-  }
-}
-
-const monthContainer = document.getElementById('month-labels');
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-// Place 12 month labels at evenly spaced intervals across 54 columns
-for (let i = 0; i < 54; i++) {
-  const label = document.createElement('div');
-
-  if (i % 5 === 0) {
-    // Show approx one label every ~4.5 weeks
-    const monthIndex = Math.floor((i / 54) * 12);
-    label.textContent = months[monthIndex];
-  } else {
-    label.textContent = '';
+  function toggleStatInfo(id) {
+    const element = document.getElementById(id);
+    element.style.display = (element.style.display === 'block') ? 'none' : 'block';
   }
 
-  label.style.textAlign = 'center';
-  monthContainer.appendChild(label);
-}
+  const studyData = {{ study_hours_per_week|safe }};
+  const ctxUp = document.getElementById('upTrendChart')?.getContext('2d');
+  const ctxDown = document.getElementById('downTrendChart')?.getContext('2d');
+  const ctxSymmetric = document.getElementById('symmetricTrendChart')?.getContext('2d');
 
+  if (document.getElementById('upTrendChart')) {
+    const upData = studyData.map(hour => hour + 3);
+    new Chart(ctxUp, {
+      type: 'bar',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'],
+        datasets: [{
+          data: upData,
+          backgroundColor: 'black',
+          borderColor: 'black',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { display: false },
+          y: { display: false }
+        }
+      }
+    });
+  }
 
+  if (document.getElementById('downTrendChart')) {
+    const downData = studyData.map(hour => hour - 3);
+    new Chart(ctxDown, {
+      type: 'bar',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'],
+        datasets: [{
+          data: downData,
+          backgroundColor: 'black',
+          borderColor: 'black',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { display: false },
+          y: { display: false }
+        }
+      }
+    });
+  }
+
+  if (document.getElementById('symmetricTrendChart')) {
+    const symmetricData = studyData.map(hour => Math.abs(hour - 5));
+    new Chart(ctxSymmetric, {
+      type: 'bar',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'],
+        datasets: [{
+          data: symmetricData,
+          backgroundColor: 'black',
+          borderColor: 'black',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: { display: false },
+          y: { display: false }
+        }
+      }
+    });
+  }
 </script>
 {% endblock %}
+

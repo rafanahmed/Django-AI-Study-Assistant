@@ -19,8 +19,8 @@ from .models import Exam, ExamQuestion
 from .forms import ExamForm, ExamQuestionForm
 from .forms import ExamAnswerForm
 from .models import ExamAnswer
-
-
+from datetime import datetime, timedelta
+from django.db.models import Sum
 
 
 from .models import FlashcardDeck, Flashcard, Review, StudyGroup, AiInteraction
@@ -259,14 +259,44 @@ def study_sessions_view(request):
     timer_uses = request.user.timer_sessions.count()
     flashcard_count = Flashcard.objects.filter(deck__user=request.user).count()
 
-    logins = LoginActivity.objects.filter(user=request.user)
-    login_dates = [login.login_date.isoformat() for login in logins]
+    study_hours_per_week = []
+    trend = 'the same as'
+    percent_change = 0
+
+    today = datetime.today()
+
+    for i in range(7):
+        week_start = today - timedelta(weeks=i)
+        week_end = week_start + timedelta(weeks=1)
+
+        weekly_hours = TimerSession.objects.filter(
+            user=request.user,
+            started_at__gte=week_start,
+            started_at__lt=week_end
+        ).aggregate(total_hours=Sum('duration_seconds'))['total_hours'] or 0
+
+        study_hours_per_week.append(weekly_hours // 3600)
+
+    if len(study_hours_per_week) > 1:
+        last_week = study_hours_per_week[0]
+        previous_week = study_hours_per_week[1]
+        if previous_week != 0:
+            if last_week > previous_week:
+                trend = 'up'
+            elif last_week < previous_week:
+                trend = 'down'
+            percent_change = round(((last_week - previous_week) / previous_week) * 100, 2)
+        else:
+            trend = 'the same as'
+            percent_change = 0
 
     return render(request, 'base/study_sessions.html', {
         'hours_spent': hours_spent,
         'timer_uses': timer_uses,
         'flashcard_count': flashcard_count,
-        'login_dates': login_dates,
+        'study_hours_per_week': study_hours_per_week,
+        'trend': trend,
+        'percent_change': percent_change,
     })
 
 
