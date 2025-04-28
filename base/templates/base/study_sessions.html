@@ -141,11 +141,11 @@
         <h4 class="text-center">Weekly Report Available</h4>
         <p class="text-center mb-5 graph-text">
           {% if trend == 'up' %}
-            Your study time was up <strong>{{ percent_change }}%</strong> last week.
+            Your Productivity Level Was Up <strong>{{ percent_change }}%</strong> last week.
           {% elif trend == 'down' %}
-            Your study time was down <strong>{{ percent_change }}%</strong> last week.
+            Your Productivity Level Was down <strong>{{ percent_change }}%</strong> last week.
           {% else %}
-            Your study time was <strong>0%</strong> last week.
+          Your Productivity Level Was At The Same Rate  <strong></strong> last week
           {% endif %}
         </p>
 
@@ -171,29 +171,24 @@
       </div>
     </div>
   </div>
-
   <div class="row mt-5 text-center">
     <div class="col-md-4">
       <div class="card mb-3">
         <div class="card-body p-3">
-          <h6 class="card-title mb-2" style="font-size: 1rem;">Study Progress</h6>
+          <h6 class="card-title mb-2" style="font-size: 1rem;">Study Progress 1</h6>
           <ul>
             <li>
               <span class="checkmark" onclick="toggleStatInfo('study-time-info')">✔️</span>
-              Total Study Time {{ total_study_time }}
-              <div id="study-time-info" class="stat-info">Additional details or breakdown of total study time...</div>
+              Hours Spent: 
+              <div id="study-time-info" class="stat-info">{{ hours_spent }}</div>
             </li>
             <li>
               <span class="checkmark" onclick="toggleStatInfo('flashcards-info')">✔️</span>
-  Flashcards Created: {{ flashcards_created }}
-  <div id="flashcards-info" class="stat-info" style="display: none;">Total: {{ flashcards_created }}</div>
+              Number Of Flashcard: 
+  <div id="flashcards-info" class="stat-info" style="display: none;">{{ flashcard_count }}</div>
 
             </li>
-            <li>
-              <span class="checkmark" onclick="toggleStatInfo('practice-exams-info')">✔️</span>
-              Practice Exams Created {{ practice_exams_created }}
-              <div id="practice-exams-info" class="stat-info">Info on practice exams...</div>
-            </li>
+            
           </ul>
         </div>
       </div>
@@ -203,53 +198,39 @@
     <div class="col-md-4">
       <div class="card mb-3">
         <div class="card-body p-3">
-          <h6 class="card-title mb-2" style="font-size: 1rem;">Study Group Activity</h6>
+          <h6 class="card-title mb-2" style="font-size: 1rem;">Study Progress 2</h6>
           <ul>
             <li>
               <span class="checkmark" onclick="toggleStatInfo('study-groups-info')">✔️</span>
-              Number of Study Groups Created {{ study_groups_created }}
-              <div id="study-groups-info" class="stat-info">Additional info about study groups...</div>
-            </li>
-            <li>
-              <span class="checkmark" onclick="toggleStatInfo('messages-info')">✔️</span>
-              Number of Messages Sent {{ messages_sent }}
-              <div id="messages-info" class="stat-info">Details about messages sent...</div>
-            </li>
-            <li>
-              <span class="checkmark" onclick="toggleStatInfo('time-in-groups-info')">✔️</span>
-              Time Spent in Study Groups {{ time_spent_in_groups }}
-              <div id="time-in-groups-info" class="stat-info">Info about time in study groups...</div>
+              Number Of Study Groups : 
+              <div id="study-groups-info" class="stat-info">{{ user_groups_count }}</div>
             </li>
           </ul>
+          <li>
+            <span class="checkmark" onclick="toggleStatInfo('practice-exams-info')">✔️</span>
+            Timer Usage: 
+            <div id="practice-exams-info" class="stat-info">{{ timer_uses }}</div>
+          </li>
         </div>
       </div>
     </div>
-
     <div class="col-md-4">
       <div class="card mb-3">
         <div class="card-body p-3">
-          <h6 class="card-title mb-2" style="font-size: 1rem;">AI Activity</h6>
+          <h6 class="card-title mb-2" style="font-size: 1rem;">Study Progress 3</h6>
           <ul>
             <li>
-              <span class="checkmark" onclick="toggleStatInfo('tutorials-info')">✔️</span>
-              Number of Online Tutorials Feedback {{ tutorials_feedback }}
-              <div id="tutorials-info" class="stat-info">Info about tutorial feedback...</div>
-            </li>
-            <li>
-              <span class="checkmark" onclick="toggleStatInfo('guide-clarifications-info')">✔️</span>
-              Number of Study Guide Clarifications {{ guide_clarifications }}
-              <div id="guide-clarifications-info" class="stat-info">Detailed info on clarifications...</div>
-            </li>
-            <li>
-              <span class="checkmark" onclick="toggleStatInfo('mood-assessment-info')">✔️</span>
-              Mood Assessment {{ mood_assessment }}
-              <div id="mood-assessment-info" class="stat-info">Info about mood assessments...</div>
+              <span class="checkmark" onclick="toggleStatInfo('reviews-count-info')">✔️</span>
+              Number Of Reviews Written: 
+              <div id="reviews-count-info" class="stat-info">{{ user_reviews_count }} </div>
             </li>
           </ul>
         </div>
       </div>
     </div>
+    </div>
   </div>
+</div>
 </div>
 {% endblock %}
 

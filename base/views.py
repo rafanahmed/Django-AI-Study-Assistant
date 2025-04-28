@@ -20,7 +20,7 @@ from .forms import ExamForm, ExamQuestionForm
 from .forms import ExamAnswerForm
 from .models import ExamAnswer
 from datetime import datetime, timedelta
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 
 
 from .models import FlashcardDeck, Flashcard, Review, StudyGroup, AiInteraction
@@ -258,6 +258,19 @@ def study_sessions_view(request):
     hours_spent = total_seconds // 3600
     timer_uses = request.user.timer_sessions.count()
     flashcard_count = Flashcard.objects.filter(deck__user=request.user).count()
+    user_groups_count = StudyGroup.objects.filter(members=request.user).count()
+    
+
+    user_groups = StudyGroup.objects.filter(members=request.user)
+
+    group_stats = []
+    for group in user_groups:
+        group_data = {
+            'group_name': group.name,
+            'creator_username': group.created_by.username,
+            'members_count': group.members.count(),
+        }
+        group_stats.append(group_data)
 
     study_hours_per_week = []
     trend = 'the same as'
@@ -286,18 +299,22 @@ def study_sessions_view(request):
             elif last_week < previous_week:
                 trend = 'down'
             percent_change = round(((last_week - previous_week) / previous_week) * 100, 2)
-        else:
-            trend = 'the same as'
-            percent_change = 0
 
-    return render(request, 'base/study_sessions.html', {
+    user_reviews_count = Review.objects.filter(user=request.user).count()
+
+    context = {
         'hours_spent': hours_spent,
         'timer_uses': timer_uses,
         'flashcard_count': flashcard_count,
+        'group_stats': group_stats,
         'study_hours_per_week': study_hours_per_week,
         'trend': trend,
         'percent_change': percent_change,
-    })
+        'user_reviews_count': user_reviews_count,
+        'user_groups_count': user_groups_count,
+    }
+
+    return render(request, 'base/study_sessions.html', context)
 
 
 
