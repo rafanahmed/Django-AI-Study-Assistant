@@ -86,3 +86,4 @@ Thumbs.db          # Windows
 # ProjectGroup2-Des.../ # Uncomment this line if this folder and its contents
                        # (like ICE 5-2.txt) should NOT be tracked by Git.
                        # Add specific file patterns inside if needed..env
+db.sqlite3
